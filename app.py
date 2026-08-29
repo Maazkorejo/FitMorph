@@ -5,6 +5,17 @@ import gradio as gr
 from main import app as fastapi_app
 from seed_data import seed_database
 
+# 0. ZeroGPU compatibility if running on Hugging Face ZeroGPU hardware
+try:
+    import spaces
+    @spaces.GPU
+    def init_gpu():
+        return True
+    init_gpu()
+    print("[Setup] Hugging Face ZeroGPU initialized.")
+except Exception:
+    pass
+
 # 1. Initialize and seed SQLite database if not present
 if not os.path.exists("fitmorph.db"):
     print("[Setup] Database not found. Initializing and seeding...")
