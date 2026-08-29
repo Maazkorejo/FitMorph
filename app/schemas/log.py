@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 from typing import Optional, List, Dict
 from datetime import datetime
 
@@ -18,8 +18,7 @@ class SetLogResponse(SetLogCreate):
     estimated_one_rep_max: float
     logged_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class CardioLogCreate(BaseModel):
     cardio_type: str = Field(..., min_length=2, max_length=50)
@@ -34,8 +33,7 @@ class CardioLogResponse(CardioLogCreate):
     user_id: int
     logged_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class VolumeSummaryResponse(BaseModel):
     total_volume_kg: float

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import ConfigDict, BaseModel, EmailStr, Field
 from typing import Optional
 from datetime import datetime
 
@@ -19,5 +19,4 @@ class UserResponse(UserBase):
     created_at: datetime
     has_profile: bool = False
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

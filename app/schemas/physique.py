@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 from typing import Optional, List, Dict
 from datetime import datetime
 
@@ -23,8 +23,7 @@ class PhysiqueScanResponse(BaseModel):
     bonus_exercises: List[CorrectiveExercise] = []
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class PhysiqueProgressComparison(BaseModel):
     current_scan_id: int
