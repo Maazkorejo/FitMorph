@@ -1,83 +1,181 @@
 # FitMorph — Adaptive Fitness Intelligence & Physique Progression Engine
 
-A production-grade, AI-powered fitness web application and adaptive workout recommendation engine that tailors training protocols for **Fat Loss, Hypertrophy, and Strength**, customizes volume for **Male vs. Female physiology**, enforces an **Injury Prevention Shield** with joint-safe substitutions, supports **Gym, Dumbbells, and Zero-Equipment** workouts, scans physique photos for **muscular symmetry**, and outputs printable **4-Week Coaching Dossier PDFs**.
+[![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite%20%2F%20SQLAlchemy-003B57.svg)](https://www.sqlalchemy.org/)
+[![Tests](https://img.shields.io/badge/Tests-25%20Passed-brightgreen.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
+
+> **FitMorph** is an adaptive, scientifically periodized fitness web engine. It dynamically personalizes training routines, prescribes goal-oriented cardio protocols, protects users from joint harm through an intelligent **Injury Prevention Shield**, tracks tonnage volume loads to schedule deload weeks via **Background Workers**, diagnoses muscular imbalances using **AI Vision Physique Scans**, and compiles executive **Printable 4-Week Coaching Dossiers (PDF)**.
 
 ---
 
-## 🏛 The 10x Claim
+## Capstone Core Concepts Implemented
 
-> *"Designing a fully personalized 4-week periodized workout plan with joint-safe exercise substitutions, gender-tailored recovery, and visual physique symmetry analysis used to require hours of manual research or a $200/month personal trainer; now FitMorph dynamically generates an adaptive, injury-vetted training routine, audits weekly plateaus, and delivers a printable Coaching Dossier PDF in under 10 seconds."*
-
----
-
-## 🛠 Core Features
-
-1. **User Authentication & Private Profiles:**
-   - Secure signup & login with bcrypt password hashing and JWT Bearer tokens.
-   - Individual progress, workout history, and photo scans are private and persistent.
-2. **Dynamic Biomechanical Workout Generator:**
-   - Adapts to goals: **Fat Loss**, **Hypertrophy (Muscle Building)**, or **Strength**.
-   - Tuned for **Male vs. Female** metabolic recovery and physiological volume limits.
-   - Dynamic equipment support: **Full Gym**, **Dumbbells Only**, or **Zero Equipment / Bodyweight**.
-3. **Injury Prevention Shield & Safe Substitutions:**
-   - Trainees can flag pains (lower back, shoulders, knees, wrists).
-   - System automatically bans contraindicated movements and substitutes joint-safe alternatives.
-4. **Cardio & Metabolic Conditioning Protocols:**
-   - Prescribes Zone 2 Low-Intensity Steady State (LISS) or High-Intensity Interval Training (HIIT) based on goals and bodyweight.
-5. **AI Vision Physique & Symmetry Scanner:**
-   - Powered by Gemini Flash Vision. Upload physique check-ins to detect muscle imbalances, posture flags, and lagging muscle groups.
-   - Injects targeted accessory volume to correct identified weak points.
-6. **Monthly Progress Comparison:**
-   - Compares Month 1 vs. Month 2 physique scans with visual progression notes.
-7. **Automated Weekly Plateau Detection:**
-   - Background worker audits weekly volume load ($Sets \times Reps \times Weight$). Automatically flags plateaus and schedules deload weeks.
-8. **Printable 4-Week Coaching Blueprint (PDF):**
-   - 1-click export of an executive training dossier with routine tables and progression targets.
+| # | Concept | Implementation in FitMorph |
+|---|---------|-----------------------------|
+| 1 | **API Endpoints** | High-performance FastAPI routers across Authentication, Biometrics, Workouts, Logs, Plateau, AI Vision, and PDF reporting. |
+| 2 | **Database** | Relational SQLite database modeled with SQLAlchemy ORM (Users, Profiles, Exercises, Plans, Days, Logged Sets, Cardio Logs, and Scans). |
+| 3 | **Authentication** | Secure bcrypt password hashing with passlib and stateful JWT Bearer tokens with python-jose. |
+| 4 | **Background Jobs** | APScheduler background worker continuously evaluating rolling 14-day training volume, detecting strength plateaus, and triggering deload weeks. |
+| 5 | **Reporting — PDF** | Dynamic ReportLab PDF compilation generating printable 4-week workout blueprints and muscular symmetry scorecards. |
+| 6 | **LLM / Vision AI** | Computer vision integration with Google Gemini Flash Vision analyzing user physique check-ins for posture and muscular symmetry. |
 
 ---
 
-## 📋 The 6 Program Concepts Implemented
+## Biomechanical Features & Intelligence
 
-| # | Concept | Where It Lives |
-|---|---|---|
-| 1 | **API Endpoints** | `app/api/` (FastAPI routes for auth, profile, workouts, physique, reports) |
-| 2 | **Database** | `app/db/` (SQLAlchemy models for Users, Profiles, Exercises, Plans, Scans) |
-| 3 | **Authentication** | `app/core/auth.py` (JWT Bearer tokens & password encryption) |
-| 4 | **Background Jobs / Cron** | `app/workers/plateau_worker.py` (APScheduler volume & fatigue audit) |
-| 5 | **Reporting — PDF** | `app/services/pdf_generator.py` (ReportLab printable 4-week blueprint) |
-| 6 | **LLM / Vision AI** | `app/services/ai_vision.py` & `ai_coach.py` (Gemini Flash Vision) |
+### 1. Goal & Equipment Specialization
+- **3 Dynamic Fitness Goals**: Fat Loss, Muscle Building (Hypertrophy), Strength & Power.
+- **3 Equipment Tiers**:
+  - **Full Gym**: Heavy barbells, cable stations, machines, and dumbbells.
+  - **Dumbbells Only**: Minimal home setup focusing on dumbbell compound movements.
+  - **No Equipment (Zero-Equipment Calisthenics)**: 100% bodyweight movements (Push-ups, doorframe rows, wall sits, glute bridges).
+
+### 2. Gender-Specific Physiological Adaptations
+- **Female Athletes**:
+  - Capitalizes on Type I muscle fiber fatigue resistance and faster intra-set ATP recovery.
+  - Higher repetition brackets (10–15 reps) and shorter rest periods (45–60 seconds).
+  - Posterior chain / glute volume bias (+30%).
+- **Male Athletes**:
+  - High-intensity neural recruitment (5–8 reps) with longer recovery intervals (90–180 seconds) to dissipate central nervous system fatigue.
+  - Upper chest, lateral deltoid, and lat width bias (+25%).
+
+### 3. Injury Prevention Shield
+The system filters out contraindicated exercises based on active user injuries:
+- **Lower Back**: Bans heavy axial spinal compression lifts (Barbell Back Squats, Barbell Deadlifts); auto-substitutes Dumbbell Goblet Squats, Leg Presses, or Romanian Deadlifts.
+- **Shoulders / Rotator Cuff**: Bans flat barbell bench presses and overhead military presses; auto-substitutes Dumbbell Floor Presses and Scapular Plane Cable Lateral Raises.
+- **Knees / Patellar Tendonitis**: Bans high-impact plyometrics and deep heavy squats; auto-substitutes Isometric Wall Sits, Glute Bridges, and Low-Impact Incline Walking.
+- **1-Click Safe Swapping**: Users can instantly swap any exercise with a single click while preserving biomechanical safety.
 
 ---
 
-## 🚀 Quickstart Guide
+## Project Structure
+
+```
+FitMorph/
+├── app/
+│   ├── api/                      # FastAPI Endpoint Routers
+│   │   ├── auth.py               # User Signup, Login & Me
+│   │   ├── profile.py            # Biometrics, Height/Weight, BMI
+│   │   ├── exercises.py          # Anatomical Exercise Search
+│   │   ├── workouts.py           # Workout Plan Generation & Swaps
+│   │   ├── logs.py               # Strength & Cardio Logging
+│   │   ├── plateau.py            # Plateau Status & Manual Audits
+│   │   ├── physique.py           # Photo Upload & Vision Analysis
+│   │   ├── reports.py            # Printable PDF Generation
+│   │   ├── coach.py              # AI Coach Form & Recovery Tips
+│   │   └── deps.py               # DB and JWT Dependency Injection
+│   ├── core/
+│   │   ├── config.py             # App Configuration & Settings
+│   │   └── security.py           # Bcrypt & JWT Utilities
+│   ├── data/                     # Biomechanical Knowledge Base
+│   │   ├── exercises_gym.py      # Full-Gym Exercise Catalog
+│   │   ├── exercises_dumbbells.py# Dumbbells-Only Catalog
+│   │   └── exercises_bodyweight.py# Zero-Equipment Calisthenics
+│   ├── db/
+│   │   └── session.py            # SQLAlchemy Engine & Session Factory
+│   ├── models/                   # SQLAlchemy Database Models
+│   │   ├── user.py               # User Model
+│   │   ├── profile.py            # Physical Profile Model
+│   │   ├── exercise.py           # Biomechanical Exercise Model
+│   │   ├── workout.py            # WorkoutPlan & WorkoutDay Models
+│   │   ├── log.py                # LoggedSet & CardioLog Models
+│   │   └── physique.py           # PhysiqueScan Model
+│   ├── schemas/                  # Pydantic v2 Request/Response Schemas
+│   ├── services/                 # Core Algorithmic Engines
+│   │   ├── injury_shield.py      # Biomechanical Contraindication Engine
+│   │   ├── gender_tuning.py      # Gender Physiological Tuning
+│   │   ├── cardio_engine.py      # LISS & HIIT Protocol Engine
+│   │   ├── workout_generator.py  # 4-Day Periodized Split Builder
+│   │   ├── volume_calculator.py  # Tonnage Load & Fatigue Index
+│   │   ├── ai_vision.py          # Gemini Flash Vision Analyzer
+│   │   ├── ai_coach.py           # Contextual AI Coach
+│   │   └── pdf_generator.py      # ReportLab PDF Dossier Builder
+│   └── workers/
+│       └── plateau_worker.py     # APScheduler Deload Worker
+├── tests/                        # Automated Pytest Suite (25 Tests)
+│   ├── test_auth.py
+│   ├── test_profile.py
+│   ├── test_injury_shield.py
+│   ├── test_workout_generator.py
+│   ├── test_volume_and_plateau.py
+│   ├── test_physique_and_pdf.py
+│   └── test_coach_api.py
+├── uploads/                      # Uploaded Physique Check-in Photos
+├── reports/                      # Generated PDF Coaching Dossiers
+├── seed_data.py                  # Database Seeder (32 exercises + demo user)
+├── run.py                        # Application Startup Script
+├── requirements.txt              # Project Python Dependencies
+└── README.md                     # Documentation
+```
+
+---
+
+## Quickstart Guide
 
 ### 1. Prerequisites
-- Python 3.10+
-- Free Gemini API Key (from [Google AI Studio](https://aistudio.google.com/) — $0, no credit card required)
+- Python 3.11+ installed.
+- Git installed.
 
-### 2. Setup Environment
+### 2. Setup & Virtual Environment
 ```bash
-# Clone and navigate
+# Clone the repository
+git clone https://github.com/Maazkorejo/FitMorph.git
 cd FitMorph
 
-# Create virtual environment
+# Create and activate virtual environment
 python -m venv venv
-.\venv\Scripts\activate  # Windows
-# source venv/bin/activate # macOS/Linux
+# On Windows PowerShell:
+.\venv\Scripts\Activate.ps1
+# On Linux/macOS:
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Environment Variables
-```bash
-cp .env.example .env
-```
-Edit `.env` and set your `SECRET_KEY` and `GEMINI_API_KEY`.
-
-### 4. Seed Database & Run App
+### 3. Initialize & Seed Database
 ```bash
 python seed_data.py
-uvicorn main:app --reload --port 8000
 ```
-Open `http://localhost:8000` to launch the FitMorph Web App!
+> Pre-seeds 32 biomechanically tagged exercises and creates a test athlete account:
+> - **Email**: `demo@fitmorph.com`
+> - **Password**: `demo1234`
+
+### 4. Run the Application
+```bash
+python run.py
+```
+- Interactive Swagger API Documentation: **[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**
+- Health Check Status: **[http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)**
+
+---
+
+## Running Automated Tests
+
+FitMorph comes with a comprehensive automated test suite verifying all 6 capstone concepts:
+
+```bash
+pytest -v
+```
+
+**Results:**
+```
+tests/test_auth.py ......................... [PASSED]
+tests/test_profile.py ...................... [PASSED]
+tests/test_injury_shield.py ................ [PASSED]
+tests/test_workout_generator.py ............ [PASSED]
+tests/test_volume_and_plateau.py ........... [PASSED]
+tests/test_physique_and_pdf.py ............. [PASSED]
+tests/test_coach_api.py .................... [PASSED]
+
+======================= 25 passed in 18.2s =======================
+```
+
+---
+
+## Author & Academic Integrity
+- **Author**: Muhammad Maaz
+- **GitHub**: [Maazkorejo/FitMorph](https://github.com/Maazkorejo/FitMorph)
+- **License**: MIT
