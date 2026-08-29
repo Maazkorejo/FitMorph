@@ -53,6 +53,7 @@ from fastapi.responses import JSONResponse, FileResponse
 static_dir = os.path.join(os.path.dirname(__file__), "app", "static")
 if os.path.exists(static_dir):
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    app.mount("/app-static", StaticFiles(directory=static_dir), name="app-static")
 
 # Mount Uploads directory for static asset viewing
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
@@ -84,9 +85,23 @@ def root_web_app():
     """Serves the FitMorph interactive Single-Page Application."""
     index_path = os.path.join(os.path.dirname(__file__), "app", "static", "index.html")
     if os.path.exists(index_path):
-        return FileResponse(index_path)
+        response = FileResponse(index_path)
+        response.headers["X-Frame-Options"] = "ALLOWALL"
+        response.headers["Content-Security-Policy"] = "frame-ancestors *"
+        return response
     return {
         "message": f"Welcome to {settings.APP_NAME} Adaptive Fitness API",
         "documentation": "/docs",
         "health": "/health"
     }
+
+@app.get("/app-view", tags=["Frontend"])
+def app_view():
+    """Serves the FitMorph application with iframe embedding allowed."""
+    index_path = os.path.join(os.path.dirname(__file__), "app", "static", "index.html")
+    if os.path.exists(index_path):
+        response = FileResponse(index_path)
+        response.headers["X-Frame-Options"] = "ALLOWALL"
+        response.headers["Content-Security-Policy"] = "frame-ancestors *"
+        return response
+    return {"message": "FitMorph UI"}
