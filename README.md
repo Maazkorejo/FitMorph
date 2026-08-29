@@ -1,13 +1,3 @@
----
-title: FitMorph Adaptive Fitness Intelligence
-emoji: 🏋️
-colorFrom: green
-colorTo: blue
-sdk: gradio
-app_file: app.py
-pinned: false
----
-
 # FitMorph — Adaptive Fitness Intelligence & Physique Progression Engine
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
@@ -17,6 +7,15 @@ pinned: false
 [![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
 > **FitMorph** is an adaptive, scientifically periodized fitness web engine. It dynamically personalizes training routines, prescribes goal-oriented cardio protocols, protects users from joint harm through an intelligent **Injury Prevention Shield**, tracks tonnage volume loads to schedule deload weeks via **Background Workers**, diagnoses muscular imbalances using **AI Vision Physique Scans**, and compiles executive **Printable 4-Week Coaching Dossiers (PDF)**.
+
+---
+
+## 📸 Application Showcase
+
+| **Command Center Dashboard** | **Injury Shield & Clinical Biometrics** |
+| :---: | :---: |
+| ![Home Command Center](docs/screenshots/home_dashboard.png) | ![Injury Shield & Clinical Biometrics](docs/screenshots/injury_shield_biometrics.png) |
+| *Widescreen hero banner, 4-column KPI metrics, live AI coach insights, and modular cards.* | *Dynamic BMI meter, active joint injury contraindications, and real-time safe lift filtering.* |
 
 ---
 
