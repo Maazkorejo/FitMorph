@@ -40,14 +40,12 @@ for img_name in ["logo.jpg", "hero_gym.jpg", "hero_cardio.jpg", "hero_scan.jpg"]
         except Exception as e:
             print(f"[Assets] Note on {img_name}: {e}")
 
-# 3. Mount Gradio to FastAPI so Hugging Face Spaces recognizes it natively,
-# while serving our full FitMorph custom athletic web app at the root (/) and /static
-with gr.Blocks(title="FitMorph") as demo:
+# 4. Mount our custom FastAPI app with Gradio and launch via Gradio's managed server
+with gr.Blocks(title="FitMorph — Adaptive Fitness Intelligence") as demo:
     gr.HTML("<meta http-equiv='refresh' content='0; url=/'>")
 
 app = gr.mount_gradio_app(fastapi_app, demo, path="/gradio")
+demo.app = app
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 7860))
-    print(f"[Ready] FitMorph running on http://0.0.0.0:{port}")
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    demo.launch()
