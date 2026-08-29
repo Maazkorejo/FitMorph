@@ -450,6 +450,39 @@ async function loadCoachAdvice() {
   } catch (e) {}
 }
 
+// Download PDF Dossier
+async function downloadPdfReport() {
+  if (!currentToken) {
+    showToast('Please log in first to download your dossier', 'warning');
+    showAuthModal(true);
+    return;
+  }
+  showToast('Generating personalized 4-week PDF dossier...', 'info');
+  try {
+    const response = await fetch(`/api/reports/download?token=${encodeURIComponent(currentToken)}`, {
+      headers: {
+        'Authorization': `Bearer ${currentToken}`
+      }
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Failed to generate PDF' }));
+      throw new Error(err.detail || 'Download failed');
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `fitmorph_blueprint_${Date.now()}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+    showToast('PDF Blueprint downloaded successfully!', 'success');
+  } catch (err) {
+    showToast(err.message, 'danger');
+  }
+}
+
 // Initialization on DOM load
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
