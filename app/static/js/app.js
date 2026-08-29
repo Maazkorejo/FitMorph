@@ -1,11 +1,12 @@
-// FitMorph Frontend Application Engine
+// FitMorph Athletic Intelligence - Client Application Engine
 const API_BASE = '/api';
 
-// State Management
+// Application State
 let currentUser = null;
 let currentToken = localStorage.getItem('fitmorph_token') || null;
 let activePlan = null;
 let activeDayIndex = 0;
+let currentPageView = 'view-dashboard';
 
 // API Helper
 async function apiRequest(endpoint, options = {}) {
@@ -14,7 +15,6 @@ async function apiRequest(endpoint, options = {}) {
     headers['Authorization'] = `Bearer ${currentToken}`;
   }
   
-  // Don't set Content-Type if sending FormData (browser sets boundary)
   if (!(options.body instanceof FormData) && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }
@@ -27,7 +27,7 @@ async function apiRequest(endpoint, options = {}) {
     
     if (response.status === 401) {
       handleLogout();
-      showToast('Session expired. Please log in again.', 'warning');
+      showToast('Session authorization expired. Please log in.', 'warning');
       return null;
     }
     
@@ -51,10 +51,10 @@ function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   
-  let icon = 'ℹ️';
+  let icon = '⚡';
   if (type === 'success') icon = '✅';
   if (type === 'danger') icon = '⚠️';
-  if (type === 'warning') icon = '⏳';
+  if (type === 'warning') icon = '🛡️';
   
   toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
   container.appendChild(toast);
@@ -65,23 +65,47 @@ function showToast(message, type = 'info') {
   }, 4000);
 }
 
-// Tab Switching
-function initTabs() {
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.getAttribute('data-tab');
-      tabBtns.forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-      
-      btn.classList.add('active');
-      const pane = document.getElementById(target);
-      if (pane) pane.classList.add('active');
-    });
-  });
+// Side Navigation Drawer Toggle
+function toggleSidebar(open = null) {
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!overlay) return;
+  
+  if (open === true) {
+    overlay.classList.add('active');
+  } else if (open === false) {
+    overlay.classList.remove('active');
+  } else {
+    overlay.classList.toggle('active');
+  }
 }
 
-// Authentication Handlers
+// Page View Navigation Router
+function navigateTo(pageId) {
+  const pages = document.querySelectorAll('.page-view');
+  pages.forEach(p => p.classList.remove('active'));
+  
+  const targetPage = document.getElementById(pageId);
+  if (targetPage) {
+    targetPage.classList.add('active');
+    currentPageView = pageId;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  // Update active sidebar nav item
+  const navLinks = document.querySelectorAll('.sidebar-nav-link');
+  navLinks.forEach(link => {
+    if (link.getAttribute('data-target') === pageId) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+  
+  // Close the drawer upon navigating
+  toggleSidebar(false);
+}
+
+// Authentication Check
 async function checkAuth() {
   if (!currentToken) {
     showAuthModal(true);
@@ -106,10 +130,17 @@ function updateUserUI() {
   const authModal = document.getElementById('auth-modal');
   if (authModal) authModal.classList.remove('open');
   
-  const userDisplay = document.getElementById('nav-user-email');
-  if (userDisplay && currentUser) {
-    userDisplay.textContent = currentUser.full_name || currentUser.email;
-  }
+  const navUserEl = document.getElementById('nav-user-email');
+  const sideUserEl = document.getElementById('sidebar-user-name');
+  const sideEmailEl = document.getElementById('sidebar-user-email');
+  const sideAvatarEl = document.getElementById('sidebar-user-avatar');
+  
+  const displayName = currentUser?.full_name || currentUser?.email?.split('@')[0] || 'Athlete';
+  
+  if (navUserEl) navUserEl.textContent = displayName;
+  if (sideUserEl) sideUserEl.textContent = displayName;
+  if (sideEmailEl) sideEmailEl.textContent = currentUser?.email || '';
+  if (sideAvatarEl) sideAvatarEl.textContent = displayName.charAt(0).toUpperCase();
 }
 
 function handleLogout() {
@@ -117,6 +148,7 @@ function handleLogout() {
   currentUser = null;
   localStorage.removeItem('fitmorph_token');
   showAuthModal(true);
+  toggleSidebar(false);
 }
 
 function showAuthModal(show = true) {
@@ -127,7 +159,7 @@ function showAuthModal(show = true) {
   }
 }
 
-// Profile & Biometrics
+// Profile & Biometrics Hub
 async function loadProfile() {
   try {
     const profile = await apiRequest('/profile');
@@ -141,7 +173,14 @@ async function loadProfile() {
       
       updateBMIDisplay(profile.bmi, profile.bmi_category);
       
-      // Update injury chips
+      // Update quick dash stats
+      const dashBmi = document.getElementById('dash-stat-bmi');
+      if (dashBmi) dashBmi.textContent = profile.bmi.toFixed(1);
+      
+      const dashGoal = document.getElementById('dash-stat-goal');
+      if (dashGoal) dashGoal.textContent = profile.fitness_goal.replace('_', ' ').toUpperCase();
+      
+      // Update active injury chips
       const injuries = profile.injury_list || [];
       document.querySelectorAll('.injury-chip').forEach(chip => {
         const val = chip.getAttribute('data-injury');
@@ -151,10 +190,19 @@ async function loadProfile() {
           chip.classList.remove('active');
         }
       });
+      
+      const dashShield = document.getElementById('dash-stat-shield');
+      if (dashShield) {
+        if (injuries.length > 0) {
+          dashShield.textContent = `${injuries.length} JOINT SHIELD(S) ACTIVE`;
+          dashShield.className = 'badge badge-crimson';
+        } else {
+          dashShield.textContent = 'NO INJURIES (FULL RANGE)';
+          dashShield.className = 'badge badge-emerald';
+        }
+      }
     }
-  } catch (e) {
-    // 404 means user needs to complete onboarding
-  }
+  } catch (e) {}
 }
 
 function updateBMIDisplay(bmi, category) {
@@ -196,17 +244,18 @@ async function handleProfileSave(e) {
         injuries
       })
     });
-    showToast('Biometric profile updated successfully!', 'success');
+    showToast('Biometric parameters and injury shield recalibrated!', 'success');
     updateBMIDisplay(profile.bmi, profile.bmi_category);
     loadCoachAdvice();
+    loadProfile();
   } catch (e) {}
 }
 
-// Workout Generation & Display
+// Workout Generation & Blueprint
 async function handleGenerateWorkout() {
   const btn = document.getElementById('btn-generate-workout');
   if (btn) btn.disabled = true;
-  showToast('Synthesizing periodized 4-week split with injury shield...', 'info');
+  showToast('Synthesizing 4-week periodized split with injury shield constraints...', 'info');
   
   try {
     const plan = await apiRequest('/workouts/generate', {
@@ -215,7 +264,7 @@ async function handleGenerateWorkout() {
     });
     activePlan = plan;
     renderWorkoutPlan(plan);
-    showToast('4-Week Blueprint generated successfully!', 'success');
+    showToast('Adaptive training blueprint generated successfully!', 'success');
   } catch (e) {
   } finally {
     if (btn) btn.disabled = false;
@@ -227,13 +276,21 @@ async function loadActiveWorkout() {
     const plan = await apiRequest('/workouts/active');
     activePlan = plan;
     renderWorkoutPlan(plan);
+    
+    // Update dashboard split preview
+    const dashPlanTitle = document.getElementById('dash-plan-title');
+    if (dashPlanTitle) dashPlanTitle.textContent = plan.title;
   } catch (e) {
-    document.getElementById('workout-container').innerHTML = `
-      <div style="text-align: center; padding: 3rem 1rem;">
-        <p style="color: var(--text-secondary); margin-bottom: 1.25rem;">No active workout generated yet.</p>
-        <button class="btn btn-primary" onclick="handleGenerateWorkout()">⚡ Generate 4-Week Blueprint</button>
-      </div>
-    `;
+    const container = document.getElementById('workout-container');
+    if (container) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 4rem 1.5rem;">
+          <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">No Active Training Blueprint Synthesized</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Generate an autoregulated periodization routine tailored to your body composition and equipment.</p>
+          <button class="btn btn-primary" onclick="handleGenerateWorkout()">⚡ Synthesize 4-Week Blueprint</button>
+        </div>
+      `;
+    }
   }
 }
 
@@ -241,10 +298,10 @@ function renderWorkoutPlan(plan) {
   const container = document.getElementById('workout-container');
   if (!container) return;
   
-  let daysNav = '<div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; overflow-x: auto;">';
+  let daysNav = '<div style="display: flex; gap: 0.6rem; margin-bottom: 1.5rem; overflow-x: auto;">';
   plan.days.forEach((day, idx) => {
     const activeCls = idx === activeDayIndex ? 'btn-primary' : 'btn-secondary';
-    daysNav += `<button class="btn ${activeCls} btn-sm" onclick="selectWorkoutDay(${idx})">Day ${day.day_number}</button>`;
+    daysNav += `<button class="btn ${activeCls} btn-sm" onclick="selectWorkoutDay(${idx})">Day ${day.day_number}: ${day.day_name.split(':')[1] || day.day_name}</button>`;
   });
   daysNav += '</div>';
   
@@ -252,7 +309,7 @@ function renderWorkoutPlan(plan) {
   
   let exercisesHtml = '';
   currentDay.exercises.forEach(ex => {
-    const swapBadge = ex.is_swap ? '<span class="badge badge-cyan" style="margin-left: 0.5rem;">SWAPPED</span>' : '';
+    const swapBadge = ex.is_swap ? '<span class="badge badge-cyan" style="margin-left: 0.5rem;">SUBSTITUTED</span>' : '';
     exercisesHtml += `
       <div class="exercise-item-card">
         <div class="exercise-meta">
@@ -260,32 +317,32 @@ function renderWorkoutPlan(plan) {
             ${ex.name} ${swapBadge}
           </div>
           <div class="exercise-stats">
-            <span><b>Sets:</b> ${ex.sets}</span>
-            <span><b>Reps:</b> ${ex.reps}</span>
-            <span><b>Rest:</b> ${ex.rest_seconds}s</span>
+            <span><b>Target Volume:</b> ${ex.sets} Working Sets</span>
+            <span><b>Intensity Bracket:</b> ${ex.reps} Reps</span>
+            <span><b>Recovery Interval:</b> ${ex.rest_seconds}s</span>
             <span><b>Target RPE:</b> ${ex.rpe_target}</span>
           </div>
-          <div class="exercise-cue">💡 ${ex.cues}</div>
+          <div class="exercise-cue">💡 <b>Biomechanical Cue:</b> ${ex.cues}</div>
         </div>
         <div>
-          <button class="btn btn-secondary btn-sm" onclick="promptExerciseSwap(${currentDay.id}, '${ex.name.replace(/'/g, "\\'")}')">🔄 Swap</button>
+          <button class="btn btn-secondary btn-sm" onclick="promptExerciseSwap(${currentDay.id}, '${ex.name.replace(/'/g, "\\'")}')">🔄 Safe Swap</button>
         </div>
       </div>
     `;
   });
   
   container.innerHTML = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
       <div>
-        <h3 style="font-size: 1.2rem; font-weight: 800;">${plan.title}</h3>
-        <p style="color: var(--text-secondary); font-size: 0.85rem;">Split: ${plan.split_type} | Equipment: ${plan.equipment.replace('_', ' ').toUpperCase()}</p>
+        <h3 style="font-size: 1.35rem; font-weight: 800;">${plan.title}</h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem;"><b>Split Architecture:</b> ${plan.split_type} &bull; <b>Equipment Tier:</b> ${plan.equipment.replace('_', ' ').toUpperCase()}</p>
       </div>
-      <button class="btn btn-primary btn-sm" onclick="handleGenerateWorkout()">🔄 Regenerate</button>
+      <button class="btn btn-primary btn-sm" onclick="handleGenerateWorkout()">⚡ Recalibrate Routine</button>
     </div>
     ${daysNav}
-    <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.25rem;">
-      <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">Prescribed Cardio Protocol:</span>
-      <p style="color: var(--text-primary); font-size: 0.9rem; margin-top: 0.2rem;">${currentDay.cardio_protocol}</p>
+    <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-bottom: 1.5rem;">
+      <span style="font-size: 0.8rem; font-weight: 800; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px;">Cardiovascular & Conditioning Protocol</span>
+      <p style="color: var(--text-primary); font-size: 0.92rem; margin-top: 0.25rem;">${currentDay.cardio_protocol}</p>
     </div>
     <div class="exercise-list">
       ${exercisesHtml}
@@ -298,9 +355,9 @@ function selectWorkoutDay(idx) {
   if (activePlan) renderWorkoutPlan(activePlan);
 }
 
-// 1-Click Joint Safe Exercise Swapper
+// 1-Click Biomechanical Exercise Swap
 async function promptExerciseSwap(dayId, exerciseName) {
-  showToast(`Finding biomechanically safe substitute for "${exerciseName}"...`, 'info');
+  showToast(`Injury Shield searching for joint-safe equivalent for "${exerciseName}"...`, 'info');
   try {
     const swapResult = await apiRequest('/workouts/swap', {
       method: 'POST',
@@ -311,7 +368,7 @@ async function promptExerciseSwap(dayId, exerciseName) {
       })
     });
     
-    showToast(`Replaced with ${swapResult.replacement.name}!`, 'success');
+    showToast(`Joint-safe substitute locked: ${swapResult.replacement.name}!`, 'success');
     loadActiveWorkout();
   } catch (e) {}
 }
@@ -338,13 +395,13 @@ async function handleSetLog(e) {
         rpe
       })
     });
-    showToast(`Logged set! Volume load: ${logged.volume_load}kg | Est 1RM: ${logged.estimated_one_rep_max}kg`, 'success');
+    showToast(`Set logged! Tonnage: ${logged.volume_load}kg | Est. 1RM: ${logged.estimated_one_rep_max}kg`, 'success');
     loadVolumeSummary();
     loadPlateauStatus();
-    loadRecentLogs();
   } catch (e) {}
 }
 
+// Volume & Deload Monitoring
 async function loadVolumeSummary() {
   try {
     const summary = await apiRequest('/logs/summary');
@@ -355,9 +412,12 @@ async function loadVolumeSummary() {
       
       const changeEl = document.getElementById('stat-volume-change');
       if (changeEl) {
-        changeEl.textContent = `${summary.weekly_change_pct > 0 ? '+' : ''}${summary.weekly_change_pct}%`;
+        changeEl.textContent = `${summary.weekly_change_pct > 0 ? '+' : ''}${summary.weekly_change_pct}% vs prior 7 days`;
         changeEl.style.color = summary.weekly_change_pct >= 0 ? 'var(--accent-emerald)' : 'var(--danger)';
       }
+      
+      const dashVol = document.getElementById('dash-stat-volume');
+      if (dashVol) dashVol.textContent = `${summary.total_volume_kg.toLocaleString()} kg`;
     }
   } catch (e) {}
 }
@@ -370,7 +430,7 @@ async function loadPlateauStatus() {
     
     if (badge) {
       if (status.deload_scheduled || status.plateau_detected) {
-        badge.textContent = 'DELOAD RECOMMENDED';
+        badge.textContent = 'DELOAD WEEK SCHEDULED';
         badge.className = 'badge badge-amber';
       } else {
         badge.textContent = 'PROGRESSIVE OVERLOAD';
@@ -381,6 +441,15 @@ async function loadPlateauStatus() {
   } catch (e) {}
 }
 
+async function triggerManualDeloadAudit() {
+  showToast('APScheduler evaluating 14-day progressive overload trajectory...', 'info');
+  try {
+    const res = await apiRequest('/plateau/trigger-audit', { method: 'POST' });
+    showToast(res.message, 'success');
+    loadPlateauStatus();
+  } catch (e) {}
+}
+
 // AI Vision Physique Scanner
 async function handlePhysiqueUpload(e) {
   e.preventDefault();
@@ -388,7 +457,7 @@ async function handlePhysiqueUpload(e) {
   const monthInput = document.getElementById('physique-month');
   
   if (!fileInput.files || fileInput.files.length === 0) {
-    showToast('Please select a physique photo to upload', 'warning');
+    showToast('Please select a physique check-in image', 'warning');
     return;
   }
   
@@ -398,8 +467,8 @@ async function handlePhysiqueUpload(e) {
   
   const scanBtn = document.getElementById('btn-scan-physique');
   scanBtn.disabled = true;
-  scanBtn.textContent = 'Analyzing Symmetry...';
-  showToast('Analyzing muscular symmetry and posture cues...', 'info');
+  scanBtn.textContent = 'Analyzing Symmetry & Posture...';
+  showToast('Processing photo through Gemini Flash Vision & Biomechanical Model...', 'info');
   
   try {
     const scan = await apiRequest('/physique/scan', {
@@ -408,11 +477,11 @@ async function handlePhysiqueUpload(e) {
     });
     
     renderPhysiqueScanResult(scan);
-    showToast('Physique symmetry analysis complete!', 'success');
+    showToast('Physique symmetry analysis completed!', 'success');
   } catch (e) {
   } finally {
     scanBtn.disabled = false;
-    scanBtn.textContent = 'Upload & Analyze Photo';
+    scanBtn.textContent = 'Upload & Analyze Physique';
   }
 }
 
@@ -431,15 +500,15 @@ function renderPhysiqueScanResult(scan) {
   const bonusContainer = document.getElementById('scan-bonus-exercises');
   if (bonusContainer && scan.bonus_exercises) {
     bonusContainer.innerHTML = scan.bonus_exercises.map(b => `
-      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; margin-top: 0.4rem;">
-        <b>${b.name}</b> (${b.target_muscle}): ${b.sets} sets x ${b.reps} reps
-        <div style="font-size: 0.78rem; color: var(--text-muted);">${b.reason}</div>
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-top: 0.5rem;">
+        <b>${b.name}</b> (${b.target_muscle}): ${b.sets} Sets &times; ${b.reps} Reps
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">${b.reason}</div>
       </div>
     `).join('');
   }
 }
 
-// AI Coach Advice
+// AI Coach Form & Recovery Advisory
 async function loadCoachAdvice() {
   try {
     const res = await apiRequest('/coach/advice');
@@ -450,14 +519,14 @@ async function loadCoachAdvice() {
   } catch (e) {}
 }
 
-// Download PDF Dossier
+// Printable PDF Report Download
 async function downloadPdfReport() {
   if (!currentToken) {
-    showToast('Please log in first to download your dossier', 'warning');
+    showToast('Authentication token required. Please log in.', 'warning');
     showAuthModal(true);
     return;
   }
-  showToast('Generating personalized 4-week PDF dossier...', 'info');
+  showToast('Compiling personalized 4-week coaching dossier via ReportLab...', 'info');
   try {
     const response = await fetch(`/api/reports/download?token=${encodeURIComponent(currentToken)}`, {
       headers: {
@@ -477,15 +546,36 @@ async function downloadPdfReport() {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
-    showToast('PDF Blueprint downloaded successfully!', 'success');
+    showToast('Executive PDF Blueprint downloaded successfully!', 'success');
   } catch (err) {
     showToast(err.message, 'danger');
   }
 }
 
-// Initialization on DOM load
+// Initialization on DOM Load
 document.addEventListener('DOMContentLoaded', () => {
-  initTabs();
+  // Hamburger Drawer Toggles
+  const menuBtn = document.getElementById('btn-toggle-menu');
+  if (menuBtn) menuBtn.addEventListener('click', () => toggleSidebar(true));
+  
+  const closeBtn = document.getElementById('btn-close-sidebar');
+  if (closeBtn) closeBtn.addEventListener('click', () => toggleSidebar(false));
+  
+  const overlay = document.getElementById('sidebar-overlay');
+  if (overlay) {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) toggleSidebar(false);
+    });
+  }
+  
+  // Navigation Links Click Handling
+  document.querySelectorAll('.sidebar-nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.getAttribute('data-target');
+      if (target) navigateTo(target);
+    });
+  });
   
   // Injury Chip Toggles
   document.querySelectorAll('.injury-chip').forEach(chip => {
@@ -517,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Login / Signup Form
+  // Auth Form
   const authForm = document.getElementById('auth-form');
   if (authForm) {
     authForm.addEventListener('submit', async (e) => {
@@ -532,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             body: JSON.stringify({ email, password })
           });
-          showToast('Account created! Logging in...', 'success');
+          showToast('Athlete account created! Authenticating...', 'success');
         }
         
         const tokenData = await apiRequest('/auth/login', {
@@ -542,7 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         currentToken = tokenData.access_token;
         localStorage.setItem('fitmorph_token', currentToken);
-        showToast('Logged in successfully!', 'success');
+        showToast('Authenticated successfully. Welcome to FitMorph!', 'success');
         checkAuth();
       } catch (err) {}
     });
