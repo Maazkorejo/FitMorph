@@ -47,6 +47,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi.responses import JSONResponse, FileResponse
+
+# Mount Static assets directory
+static_dir = os.path.join(os.path.dirname(__file__), "app", "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
 # Mount Uploads directory for static asset viewing
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
@@ -72,9 +79,12 @@ def health_check():
         "database": "connected"
     }
 
-@app.get("/", tags=["Health"])
-def root_endpoint():
-    """Root endpoint welcoming visitors and linking to interactive docs."""
+@app.get("/", tags=["Frontend"])
+def root_web_app():
+    """Serves the FitMorph interactive Single-Page Application."""
+    index_path = os.path.join(os.path.dirname(__file__), "app", "static", "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
     return {
         "message": f"Welcome to {settings.APP_NAME} Adaptive Fitness API",
         "documentation": "/docs",

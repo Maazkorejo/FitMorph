@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitMorph — Adaptive Fitness Intelligence</title>
+  <link rel="icon" type="image/jpeg" href="/static/img/logo.jpg">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-wrapper">
+        <img src="/static/img/logo.jpg" alt="FitMorph Logo" class="brand-logo-img">
+        <div>
+          <span class="brand-title">FITMORPH</span>
+          <span class="brand-punchline">Adaptive Fitness Intelligence</span>
+        </div>
+      </a>
+      
+      <div class="nav-actions">
+        <div class="user-badge" id="nav-user-badge">
+          <span class="user-indicator"></span>
+          <span id="nav-user-email">Athlete</span>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="main-content">
+    
+    <!-- Navigation Tabs -->
+    <nav class="tab-navigation">
+      <button class="tab-btn active" data-tab="tab-workouts">
+        <span>🏋️</span> Workout Blueprint
+      </button>
+      <button class="tab-btn" data-tab="tab-profile">
+        <span>🛡️</span> Athlete Hub & Injury Shield
+      </button>
+      <button class="tab-btn" data-tab="tab-logger">
+        <span>📝</span> Session Logger
+      </button>
+      <button class="tab-btn" data-tab="tab-physique">
+        <span>📸</span> AI Vision Scanner
+      </button>
+      <button class="tab-btn" data-tab="tab-progress">
+        <span>📈</span> Volume & Deload Hub
+      </button>
+      <button class="tab-btn" data-tab="tab-reports">
+        <span>📄</span> Printable Blueprint PDF
+      </button>
+    </nav>
+
+    <!-- TAB 1: WORKOUT BLUEPRINT -->
+    <section id="tab-workouts" class="tab-pane active">
+      <div class="card">
+        <div id="workout-container">
+          <div style="text-align: center; padding: 2rem;">
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Loading your active workout routine...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: ATHLETE PROFILE & INJURY SHIELD -->
+    <section id="tab-profile" class="tab-pane">
+      <div class="grid-2">
+        
+        <!-- Biometrics & Goals Form -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><span>⚙️</span> Physical Biometrics & Goals</h3>
+          </div>
+          
+          <form id="profile-form">
+            <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+              <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select id="prof-gender" class="form-select">
+                  <option value="male">Male (CNS & Upper V-Taper Tuning)</option>
+                  <option value="female">Female (Glute/Hamstring & High Density)</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Age</label>
+                <input type="number" id="prof-age" class="form-input" value="26" min="12" max="100">
+              </div>
+            </div>
+
+            <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+              <div class="form-group">
+                <label class="form-label">Height (cm)</label>
+                <input type="number" id="prof-height" class="form-input" value="180" step="0.5" min="100" max="250">
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Weight (kg)</label>
+                <input type="number" id="prof-weight" class="form-input" value="78" step="0.5" min="30" max="300">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Fitness Goal</label>
+              <select id="prof-goal" class="form-select">
+                <option value="hypertrophy">Muscle Building (Hypertrophy)</option>
+                <option value="fat_loss">Fat Loss & Conditioning</option>
+                <option value="strength">Strength & Neuromuscular Power</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Equipment Access</label>
+              <select id="prof-equip" class="form-select">
+                <option value="full_gym">Full Gym (Barbells, Cables, Machines, Dumbbells)</option>
+                <option value="dumbbells_only">Dumbbells Only (Minimal Home Gym)</option>
+                <option value="no_equipment">Zero Equipment (100% Calisthenics & Bodyweight)</option>
+              </select>
+            </div>
+
+            <!-- Injury Shield Interactive Chips -->
+            <div class="form-group">
+              <label class="form-label" style="display: flex; justify-content: space-between;">
+                <span>Active Joint Injuries / Restrictions</span>
+                <span style="color: var(--danger); font-size: 0.75rem;">Shield filters high-risk lifts</span>
+              </label>
+              <div class="injury-chips">
+                <div class="injury-chip" data-injury="lower_back">🛡️ Lower Back Pain</div>
+                <div class="injury-chip" data-injury="knees">🛡️ Knee / Patellar Pain</div>
+                <div class="injury-chip" data-injury="shoulders">🛡️ Shoulder Impingement</div>
+                <div class="injury-chip" data-injury="wrists">🛡️ Wrist Strain</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+              💾 Save Profile & Recalibrate Engine
+            </button>
+          </form>
+        </div>
+
+        <!-- Biometric Intelligence Summary Card -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="card-header">
+              <h3 class="card-title"><span>📊</span> Biometric Analysis</h3>
+              <span class="badge badge-emerald" id="bmi-badge">NORMAL</span>
+            </div>
+            
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;">
+              <span style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">Calculated Body Mass Index (BMI)</span>
+              <div id="bmi-value" style="font-size: 3rem; font-weight: 800; color: var(--text-primary); line-height: 1.1; margin: 0.5rem 0;">24.1</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Adjusts cardiovascular modality and axial loading threshold.</p>
+            </div>
+
+            <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-emerald); margin-bottom: 0.5rem;">🛡️ How the Injury Shield Protects You</h4>
+              <ul style="font-size: 0.85rem; color: var(--text-secondary); list-style: disc inside; line-height: 1.6;">
+                <li><b>Lower Back:</b> Replaces heavy spinal loading with chest-supported rows and Bulgarian split squats.</li>
+                <li><b>Shoulders:</b> Auto-substitutes dumbbell floor presses with neutral grip.</li>
+                <li><b>Knees:</b> Replaces high-impact plyometrics with isometric wall sits and LISS incline walks.</li>
+              </ul>
+            </div>
+          </div>
+
+          <button class="btn btn-cyan btn-block" style="margin-top: 1.5rem;" onclick="handleGenerateWorkout()">
+            ⚡ Re-Generate 4-Week Routine with Injury Shield
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: SESSION LOGGER -->
+    <section id="tab-logger" class="tab-pane">
+      <div class="grid-2">
+        
+        <!-- Strength Set Logger -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><span>🏋️</span> Log Working Set</h3>
+          </div>
+          
+          <form id="log-set-form">
+            <div class="form-group">
+              <label class="form-label">Exercise Name</label>
+              <input type="text" id="log-ex-name" class="form-input" placeholder="e.g. Incline Dumbbell Press" required>
+            </div>
+
+            <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+              <div class="form-group">
+                <label class="form-label">Target Muscle</label>
+                <select id="log-muscle" class="form-select">
+                  <option value="Chest">Chest</option>
+                  <option value="Upper Back">Upper Back</option>
+                  <option value="Lats">Lats</option>
+                  <option value="Quads">Quads</option>
+                  <option value="Glutes">Glutes</option>
+                  <option value="Hamstrings">Hamstrings</option>
+                  <option value="Shoulders">Shoulders</option>
+                  <option value="Triceps">Triceps</option>
+                  <option value="Biceps">Biceps</option>
+                  <option value="Core">Core</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Set Number</label>
+                <input type="number" id="log-set-num" class="form-input" value="1" min="1" max="20">
+              </div>
+            </div>
+
+            <div class="grid-3" style="gap: 0.85rem;">
+              <div class="form-group">
+                <label class="form-label">Weight (kg)</label>
+                <input type="number" id="log-weight" class="form-input" value="30" step="0.5" min="0" max="500">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Reps Completed</label>
+                <input type="number" id="log-reps" class="form-input" value="10" min="1" max="100">
+              </div>
+              <div class="form-group">
+                <label class="form-label">RPE (1-10)</label>
+                <input type="number" id="log-rpe" class="form-input" value="8" step="0.5" min="1" max="10">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              💾 Record Set (Calculates Volume & 1RM)
+            </button>
+          </form>
+        </div>
+
+        <!-- 1RM Formula & Tonnage Preview -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><span>📐</span> Biomechanical Calculations</h3>
+          </div>
+
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">Epley Estimated 1RM Formula</span>
+            <div style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--text-primary); margin: 0.4rem 0;">
+              1RM = Weight &times; (1 + Reps / 30)
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Calculates your absolute maximum force capacity safely without risking spinal or joint injury under true max load.</p>
+          </div>
+
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-emerald); text-transform: uppercase;">Volume Load Equation</span>
+            <div style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--text-primary); margin: 0.4rem 0;">
+              Volume Load (kg) = Sets &times; Reps &times; Weight
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Tracked continuously by our APScheduler background workers to schedule automatic deloads when fatigue sets in.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 4: AI VISION SCANNER -->
+    <section id="tab-physique" class="tab-pane">
+      <div class="grid-2">
+        
+        <!-- Upload Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><span>📷</span> Physique Photo Check-In</h3>
+            <span class="badge badge-cyan">Gemini Flash Vision</span>
+          </div>
+
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Upload your monthly check-in photo. Our AI vision scanner evaluates postural alignment, flags muscular imbalances, and injects corrective exercises into your routine.
+          </p>
+
+          <form id="physique-form">
+            <div class="form-group">
+              <label class="form-label">Check-In Month</label>
+              <select id="physique-month" class="form-select">
+                <option value="1">Month 1 Baseline</option>
+                <option value="2">Month 2 Check-in</option>
+                <option value="3">Month 3 Progression</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Select Photo (JPG / PNG)</label>
+              <input type="file" id="physique-file" class="form-input" accept="image/*" required>
+            </div>
+
+            <img id="scan-preview-img" src="#" alt="Preview" style="display: none; max-height: 220px; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color); object-fit: contain; width: 100%; background: black;">
+
+            <button type="submit" id="btn-scan-physique" class="btn btn-primary btn-block">
+              🔍 Upload & Analyze Photo
+            </button>
+          </form>
+        </div>
+
+        <!-- AI Analysis Results Scorecard -->
+        <div class="card" id="physique-result-card" style="display: none;">
+          <div class="card-header">
+            <h3 class="card-title"><span>📊</span> Muscular Symmetry Scorecard</h3>
+            <span class="badge badge-emerald" id="scan-score">82.0 / 100</span>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Postural Alignment Cue:</span>
+            <p id="scan-posture" style="font-size: 0.9rem; color: var(--text-primary); margin-top: 0.2rem;"></p>
+          </div>
+
+          <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1rem;">
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--accent-emerald); text-transform: uppercase;">Strong Muscle Groups</span>
+              <div id="scan-strong" style="font-size: 0.85rem; font-weight: 600; margin-top: 0.2rem;"></div>
+            </div>
+
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--warning); text-transform: uppercase;">Priority Lagging Areas</span>
+              <div id="scan-lagging" style="font-size: 0.85rem; font-weight: 600; margin-top: 0.2rem;"></div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">AI Biomechanical Guidance:</span>
+            <p id="scan-notes" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;"></p>
+          </div>
+
+          <div>
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">Prescribed Corrective Exercises:</span>
+            <div id="scan-bonus-exercises"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 5: VOLUME & DELOAD HUB -->
+    <section id="tab-progress" class="tab-pane">
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        <div class="card" style="text-align: center;">
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Weekly Tonnage Volume</span>
+          <div id="stat-total-volume" style="font-size: 2.2rem; font-weight: 800; color: var(--accent-emerald); margin: 0.3rem 0;">0 kg</div>
+          <span id="stat-volume-change" style="font-size: 0.85rem; font-weight: 700;">+0.0% vs prior week</span>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Total Sets Completed</span>
+          <div id="stat-total-sets" style="font-size: 2.2rem; font-weight: 800; color: var(--accent-cyan); margin: 0.3rem 0;">0</div>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Cumulative sets</span>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Fatigue & Deload Status</span>
+          <div style="margin: 0.8rem 0;">
+            <span class="badge badge-emerald" id="plateau-status-badge">PROGRESSIVE OVERLOAD</span>
+          </div>
+          <span id="plateau-recommendation" style="font-size: 0.8rem; color: var(--text-muted);">Audited by APScheduler</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><span>🤖</span> AI Coach Form & Recovery Advisory</h3>
+          <button class="btn btn-secondary btn-sm" onclick="loadCoachAdvice()">🔄 Refresh Tips</button>
+        </div>
+        <div id="coach-advice-text" style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;">
+          Loading coaching tips tailored to your active goal and flagged injuries...
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: PRINTABLE DOSSIER PDF -->
+    <section id="tab-reports" class="tab-pane">
+      <div class="card" style="max-width: 680px; margin: 0 auto; text-align: center; padding: 3rem 2rem;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent-emerald-glow); color: var(--accent-emerald); font-size: 2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+          📄
+        </div>
+        <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">Printable 4-Week Coaching Blueprint</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+          Export your complete, scientifically periodized 4-week training routine, prescribed cardio protocol, and AI muscular symmetry scorecard into an executive PDF dossier compiled via ReportLab.
+        </p>
+
+        <a href="/api/reports/download" target="_blank" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1rem; text-decoration: none;">
+          📥 Download 4-Week Blueprint (PDF)
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-dialog">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <img src="/static/img/logo.jpg" alt="FitMorph Logo" style="width: 56px; height: 56px; border-radius: var(--radius-md); margin-bottom: 0.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800;">Welcome to FitMorph</h3>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Adaptive Fitness Intelligence</p>
+      </div>
+
+      <form id="auth-form">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="auth-email" class="form-input" placeholder="athlete@fitmorph.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="auth-password" class="form-input" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+          <input type="checkbox" id="auth-is-signup">
+          <label for="auth-is-signup" style="font-size: 0.85rem; color: var(--text-secondary); cursor: pointer;">
+            Create a new athlete account (Sign Up)
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+          Enter FitMorph
+        </button>
+
+        <div style="margin-top: 1.25rem; text-align: center; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="fillDemoCredentials()">
+            🚀 Quick Sign-In with Demo Athlete
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function fillDemoCredentials() {
+      document.getElementById('auth-email').value = 'demo@fitmorph.com';
+      document.getElementById('auth-password').value = 'demo1234';
+      document.getElementById('auth-is-signup').checked = false;
+      document.getElementById('auth-form').dispatchEvent(new Event('submit'));
+    }
+  </script>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
