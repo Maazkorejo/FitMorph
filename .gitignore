@@ -1,0 +1,16 @@
+# Python & Environment
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+
+# Database & Uploads
+*.db
+*.sqlite3
+uploads/
+reports/*.pdf
+
+# OS Artifacts
+.DS_Store
+Thumbs.db
