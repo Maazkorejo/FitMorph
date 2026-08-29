@@ -1,3 +1,13 @@
+---
+title: FitMorph Adaptive Fitness Intelligence
+emoji: 🏋️
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # FitMorph — Adaptive Fitness Intelligence & Physique Progression Engine
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
