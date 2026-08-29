@@ -3,6 +3,7 @@ import os
 import sys
 
 def main():
+    port = int(os.getenv("PORT", 8080))
     print("=" * 60)
     print("           FITMORPH ATHLETIC INTELLIGENCE ENGINE           ")
     print("   Adaptive Periodization, Injury Shield & Vision AI Coach ")
@@ -22,13 +23,13 @@ def main():
     os.makedirs("uploads", exist_ok=True)
     os.makedirs("reports", exist_ok=True)
 
-    print("[Ready] Server starting at http://127.0.0.1:8000")
-    print("[Docs]  Interactive Swagger UI: http://127.0.0.1:8000/docs")
-    print("[Health] API Status endpoint:   http://127.0.0.1:8000/health")
+    print(f"[Ready] FitMorph Web App: http://127.0.0.1:{port}")
+    print(f"[Docs]  Interactive Swagger UI: http://127.0.0.1:{port}/docs")
+    print(f"[Health] API Status endpoint:   http://127.0.0.1:{port}/health")
     print("=" * 60)
 
     # 3. Launch Uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
 
 if __name__ == "__main__":
     main()
