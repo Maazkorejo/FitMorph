@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FitMorph Mobile — Adaptive Fitness Intelligence</title>
+  <title>FitMorph — Adaptive Fitness Intelligence</title>
   <link rel="icon" type="image/jpeg" href="/static/img/logo.jpg">
-  <link rel="stylesheet" href="/static/css/style.css?v=3.0">
+  <link rel="stylesheet" href="/static/css/style.css?v=4.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -13,577 +13,699 @@
 <body>
 
   <!-- ======================================================== -->
-  <!-- MOBILE DEVICE WRAPPER FRAME (RESPONSIVE ON PHONES)       -->
+  <!-- TOP APPLICATION NAVIGATION BAR (DESKTOP & MOBILE)        -->
   <!-- ======================================================== -->
-  <div class="mobile-device-wrapper">
-    
-    <!-- Phone Top Notch (Desktop aesthetic frame) -->
-    <div class="phone-notch">
-      <div class="notch-speaker"></div>
-    </div>
-
-    <!-- Phone Status Bar -->
-    <div class="phone-status-bar">
-      <span>9:41</span>
-      <div style="display: flex; gap: 6px; font-size: 0.7rem;">
-        <span>5G</span>
-        <span>100%</span>
-      </div>
-    </div>
-
-    <!-- Top Mobile App Bar -->
-    <header class="mobile-app-bar">
-      <div class="app-bar-left">
+  <header class="top-nav-bar">
+    <div class="top-nav-container">
+      
+      <div class="top-nav-left">
         <!-- Hamburger Menu Button (Opens Sliding Drawer) -->
-        <button class="menu-btn" id="btn-open-drawer" aria-label="Open Navigation Menu">
+        <button class="menu-toggle-btn" id="btn-open-drawer" aria-label="Open Navigation Menu">
           <span></span>
           <span></span>
           <span></span>
         </button>
-        
-        <div class="app-bar-brand">
-          <img src="/static/img/logo.jpg" alt="FitMorph" class="app-bar-logo" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;">
-          <span class="app-bar-name">FITMORPH</span>
+
+        <a class="top-brand-link" onclick="navTo('page-home')">
+          <img src="/static/img/logo.jpg" alt="FitMorph Logo" class="top-brand-logo" style="width: 36px; height: 36px; border-radius: 10px; object-fit: cover;">
+          <div>
+            <div class="top-brand-name">FITMORPH</div>
+            <div class="top-brand-punchline">Adaptive Fitness Intelligence</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation Shortcuts -->
+      <nav class="desktop-nav-shortcuts">
+        <a class="desktop-nav-link active" data-target="page-home">⚡ Home</a>
+        <a class="desktop-nav-link" data-target="page-workouts">🏋️ Split</a>
+        <a class="desktop-nav-link" data-target="page-shield">🛡️ Shield</a>
+        <a class="desktop-nav-link" data-target="page-log">📝 Logger</a>
+        <a class="desktop-nav-link" data-target="page-scan">📸 AI Scan</a>
+        <a class="desktop-nav-link" data-target="page-deload">📈 Deload</a>
+        <a class="desktop-nav-link" data-target="page-pdf">📄 Dossier</a>
+      </nav>
+
+      <div class="top-nav-right">
+        <div class="athlete-profile-pill" onclick="toggleDrawer(true)">
+          <div class="athlete-avatar-circle" id="top-bar-avatar">A</div>
+          <span class="athlete-pill-name" id="top-bar-name">Athlete</span>
         </div>
       </div>
 
-      <div class="athlete-avatar-btn" id="top-bar-avatar" onclick="toggleDrawer(true)">
-        A
-      </div>
-    </header>
-
-    <!-- ====================================================== -->
-    <!-- SLIDING SIDE DRAWER (OPENS AFTER PRESSING HAMBURGER)   -->
-    <!-- ====================================================== -->
-    <div class="side-drawer-overlay" id="side-drawer-overlay">
-      <aside class="side-drawer">
-        
-        <div class="drawer-header">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <img src="/static/img/logo.jpg" alt="Logo" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;">
-            <div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF;">FITMORPH</div>
-              <div style="font-size: 0.6rem; font-weight: 700; color: var(--neon-mint); letter-spacing: 1px;">INTELLIGENCE ENGINE</div>
-            </div>
-          </div>
-          <button class="drawer-close-btn" id="btn-close-drawer">&times;</button>
-        </div>
-
-        <!-- Athlete Profile Box -->
-        <div class="drawer-athlete-box">
-          <div class="athlete-avatar-btn" id="drawer-athlete-avatar" style="width: 40px; height: 40px; font-size: 1.1rem;">A</div>
-          <div style="overflow: hidden;">
-            <div style="font-size: 0.92rem; font-weight: 700;" id="drawer-athlete-name">Athlete</div>
-            <div style="font-size: 0.72rem; color: var(--text-sub); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="drawer-athlete-email">athlete@fitmorph.com</div>
-          </div>
-        </div>
-
-        <!-- Menu Links -->
-        <ul class="drawer-menu-list">
-          <li class="drawer-menu-item">
-            <a class="drawer-menu-link active" data-target="page-home">
-              <span class="drawer-menu-icon">⚡</span>
-              <span>Home Dashboard</span>
-            </a>
-          </li>
-          <li class="drawer-menu-item">
-            <a class="drawer-menu-link" data-target="page-workouts">
-              <span class="drawer-menu-icon">🏋️</span>
-              <span>Workout Blueprint</span>
-            </a>
-          </li>
-          <li class="drawer-menu-item">
-            <a class="drawer-menu-link" data-target="page-shield">
-              <span class="drawer-menu-icon">🛡️</span>
-              <span>Injury Shield & Biometrics</span>
-            </a>
-          </li>
-          <li class="drawer-menu-item">
-            <a class="drawer-menu-link" data-target="page-log">
-              <span class="drawer-menu-icon">📝</span>
-              <span>Force & Set Logger</span>
-            </a>
-          </li>
-          <li class="drawer-menu-item">
-            <a class="drawer-menu-link" data-target="page-scan">
-              <span class="drawer-menu-icon">📸</span>
-              <span>AI Vision Symmetry Scanner</span>
-            </a>
-          </li>
-          <li class="drawer-menu-item">
-            <a class="drawer-menu-link" data-target="page-deload">
-              <span class="drawer-menu-icon">📈</span>
-              <span>Tonnage & Deload Hub</span>
-            </a>
-          </li>
-          <li class="drawer-menu-item">
-            <a class="drawer-menu-link" data-target="page-pdf">
-              <span class="drawer-menu-icon">📄</span>
-              <span>Executive Dossier (PDF)</span>
-            </a>
-          </li>
-        </ul>
-
-        <div class="drawer-footer">
-          <button class="mobile-btn btn-dark-sub" onclick="handleLogout()">
-            🔒 Sign Out / Switch Athlete
-          </button>
-        </div>
-
-      </aside>
     </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- SLIDING SIDE DRAWER (OPENS ON HAMBURGER PRESS)           -->
+  <!-- ======================================================== -->
+  <div class="side-drawer-overlay" id="side-drawer-overlay">
+    <aside class="side-drawer">
+      
+      <div class="drawer-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="/static/img/logo.jpg" alt="Logo" style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover;">
+          <div>
+            <div style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF;">FITMORPH</div>
+            <div style="font-size: 0.62rem; font-weight: 700; color: var(--neon-mint); letter-spacing: 1px;">INTELLIGENCE ENGINE</div>
+          </div>
+        </div>
+        <button class="drawer-close-btn" id="btn-close-drawer">&times;</button>
+      </div>
+
+      <!-- Athlete Profile Box -->
+      <div class="drawer-athlete-box">
+        <div class="athlete-avatar-circle" id="drawer-athlete-avatar" style="width: 42px; height: 42px; font-size: 1.15rem;">A</div>
+        <div style="overflow: hidden;">
+          <div style="font-size: 0.95rem; font-weight: 700;" id="drawer-athlete-name">Athlete</div>
+          <div style="font-size: 0.75rem; color: var(--text-sub); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="drawer-athlete-email">athlete@fitmorph.com</div>
+        </div>
+      </div>
+
+      <!-- Navigation Menu List -->
+      <ul class="drawer-menu-list">
+        <li class="drawer-menu-item">
+          <a class="drawer-menu-link active" data-target="page-home">
+            <span class="drawer-menu-icon">⚡</span>
+            <span>Home Dashboard</span>
+          </a>
+        </li>
+        <li class="drawer-menu-item">
+          <a class="drawer-menu-link" data-target="page-workouts">
+            <span class="drawer-menu-icon">🏋️</span>
+            <span>Workout Blueprint</span>
+          </a>
+        </li>
+        <li class="drawer-menu-item">
+          <a class="drawer-menu-link" data-target="page-shield">
+            <span class="drawer-menu-icon">🛡️</span>
+            <span>Biometrics & Injury Shield</span>
+          </a>
+        </li>
+        <li class="drawer-menu-item">
+          <a class="drawer-menu-link" data-target="page-log">
+            <span class="drawer-menu-icon">📝</span>
+            <span>Force & Set Logger</span>
+          </a>
+        </li>
+        <li class="drawer-menu-item">
+          <a class="drawer-menu-link" data-target="page-scan">
+            <span class="drawer-menu-icon">📸</span>
+            <span>AI Vision Symmetry Scanner</span>
+          </a>
+        </li>
+        <li class="drawer-menu-item">
+          <a class="drawer-menu-link" data-target="page-deload">
+            <span class="drawer-menu-icon">📈</span>
+            <span>Tonnage & Deload Hub</span>
+          </a>
+        </li>
+        <li class="drawer-menu-item">
+          <a class="drawer-menu-link" data-target="page-pdf">
+            <span class="drawer-menu-icon">📄</span>
+            <span>Executive Dossier (PDF)</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="drawer-footer">
+        <button class="app-btn btn-dark-elevated btn-block btn-sm" onclick="handleLogout()">
+          🔒 Sign Out / Switch Athlete
+        </button>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MAIN APPLICATION VIEWPORT (EXPANDS ON DESKTOP & MOBILE)  -->
+  <!-- ======================================================== -->
+  <main class="main-viewport" id="main-viewport">
 
     <!-- ====================================================== -->
-    <!-- SCROLLABLE SCREEN VIEWPORT (DEDICATED SCREENS)          -->
+    <!-- SCREEN 1: HOME DASHBOARD                               -->
     <!-- ====================================================== -->
-    <main class="screen-viewport" id="screen-viewport">
-
-      <!-- SCREEN 1: HOME DASHBOARD -->
-      <section id="page-home" class="mobile-page active">
-        
-        <div style="margin-bottom: 14px;">
-          <span style="font-size: 0.78rem; font-weight: 700; color: var(--neon-mint); text-transform: uppercase;">Adaptive Intelligence</span>
-          <h2 style="font-size: 1.45rem; font-weight: 800; letter-spacing: -0.5px;">Welcome Back, Athlete</h2>
-        </div>
-
-        <!-- Featured Workout Card with Fitness Photography (Like Reference 3) -->
-        <div class="hero-feature-card" style="cursor: pointer;" onclick="navTo('page-workouts')">
-          <img src="/static/img/hero_gym.jpg" alt="Active Routine">
-          <div class="hero-grad"></div>
-          <div class="hero-info">
-            <span class="metric-pill pill-mint" style="margin-bottom: 6px;">Active Mesocycle</span>
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF;" id="home-featured-title">4-Week Periodized Routine</h3>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-              <span style="font-size: 0.78rem; color: var(--text-sub);">4 Days Split &bull; Autoregulated</span>
-              <span style="font-size: 0.85rem; font-weight: 700; color: var(--neon-mint);">Start Workout &rarr;</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick 2x2 Metrics (Like References 1 & 2) -->
-        <div class="metrics-row">
-          <div class="mini-stat-card">
-            <div class="mini-stat-label">7-Day Tonnage</div>
-            <div class="mini-stat-val" id="home-stat-volume" style="color: var(--neon-mint);">0 kg</div>
-            <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 4px;">Cumulative Workload</div>
-          </div>
-
-          <div class="mini-stat-card">
-            <div class="mini-stat-label">Injury Shield</div>
-            <div class="mini-stat-val" id="home-stat-shield" style="font-size: 1.1rem; color: var(--neon-cyan);">Full Range</div>
-            <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 4px;">Joint Safety Active</div>
-          </div>
-        </div>
-
-        <div class="metrics-row">
-          <div class="mini-stat-card">
-            <div class="mini-stat-label">Body Mass Index</div>
-            <div class="mini-stat-val" id="home-stat-bmi">24.1</div>
-            <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 4px;">Normal Weight Range</div>
-          </div>
-
-          <div class="mini-stat-card">
-            <div class="mini-stat-label">Target Adaptation</div>
-            <div class="mini-stat-val" id="home-stat-goal" style="font-size: 1rem; color: var(--text-main);">HYPERTROPHY</div>
-            <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 4px;">Cross-Sectional Growth</div>
-          </div>
-        </div>
-
-        <!-- AI Coach Daily Advice Card -->
-        <div class="app-card">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-            <div style="font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
-              <span>🤖</span> AI Coach Advisory
-            </div>
-            <span class="metric-pill pill-cyan" style="font-size: 0.65rem;">Live</span>
-          </div>
-          <p id="coach-advice-box" style="font-size: 0.82rem; color: var(--text-sub); line-height: 1.6;">
-            Autoregulating training intensity based on joint restrictions and weekly mechanical load.
+    <section id="page-home" class="app-page-view active">
+      
+      <!-- Hero Banner with Cinematic Fitness Photography -->
+      <div class="hero-banner-card">
+        <img src="/static/img/hero_gym.jpg" alt="Athletic Training Hero">
+        <div class="hero-overlay-grad"></div>
+        <div class="hero-text-content">
+          <span class="metric-pill pill-mint" style="margin-bottom: 8px;">Adaptive Intelligence System</span>
+          <h1 class="hero-title-text">Welcome Back, <span id="home-greeting-name">Athlete</span></h1>
+          <p class="hero-sub-text">
+            FitMorph synthesizes clinical biomechanics, injury prevention boundaries, and computer vision symmetry analysis to continually evolve your training stimulus.
           </p>
-        </div>
-
-      </section>
-
-      <!-- SCREEN 2: WORKOUT BLUEPRINT -->
-      <section id="page-workouts" class="mobile-page">
-        
-        <div class="hero-feature-card" style="height: 130px; margin-bottom: 14px;">
-          <img src="/static/img/hero_cardio.jpg" alt="Conditioning">
-          <div class="hero-grad"></div>
-          <div class="hero-info">
-            <span class="metric-pill pill-cyan" style="margin-bottom: 4px;">Mesocycle Plan</span>
-            <h3 style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF;">Periodized Training Split</h3>
+          <div style="margin-top: 14px; display: flex; gap: 10px;">
+            <button class="app-btn btn-neon-mint btn-sm" onclick="navTo('page-workouts')">
+              🏋️ Open Workout Split
+            </button>
+            <button class="app-btn btn-dark-elevated btn-sm" onclick="navTo('page-shield')">
+              🛡️ Configure Injury Shield
+            </button>
           </div>
         </div>
+      </div>
 
+      <!-- 4-Column KPI Status Row -->
+      <div class="grid-metrics-4">
+        
+        <div class="mini-stat-card">
+          <div class="mini-stat-label">7-Day Tonnage</div>
+          <div class="mini-stat-val" id="home-stat-volume" style="color: var(--neon-mint);">0 kg</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">Cumulative Workload</div>
+        </div>
+
+        <div class="mini-stat-card">
+          <div class="mini-stat-label">Injury Shield Status</div>
+          <div class="mini-stat-val" id="home-stat-shield" style="font-size: 1.25rem; color: var(--neon-cyan);">Full Range</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">Active Joint Protection</div>
+        </div>
+
+        <div class="mini-stat-card">
+          <div class="mini-stat-label">Body Mass Index (BMI)</div>
+          <div class="mini-stat-val" id="home-stat-bmi">24.1</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">Normal Weight Range</div>
+        </div>
+
+        <div class="mini-stat-card">
+          <div class="mini-stat-label">Target Adaptation</div>
+          <div class="mini-stat-val" id="home-stat-goal" style="font-size: 1.15rem; color: var(--text-main);">HYPERTROPHY</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">Cross-Sectional Growth</div>
+        </div>
+
+      </div>
+
+      <!-- Quick Action Modules Grid -->
+      <div class="grid-cols-3">
+        
+        <div class="app-card" style="cursor: pointer;" onclick="navTo('page-workouts')">
+          <div style="font-size: 2rem; margin-bottom: 10px;">🏋️</div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 6px;">Workout Blueprint</h3>
+          <p style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.6;">
+            Access your 4-week daily routines, target sets, reps, rest interval countdown timers, and 1-click safe substitutions.
+          </p>
+          <div style="margin-top: 14px; color: var(--neon-mint); font-size: 0.85rem; font-weight: 700;">Open Workout Split &rarr;</div>
+        </div>
+
+        <div class="app-card" style="cursor: pointer;" onclick="navTo('page-shield')">
+          <div style="font-size: 2rem; margin-bottom: 10px;">🛡️</div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 6px;">Injury Shield & Biometrics</h3>
+          <p style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.6;">
+            Configure joint restrictions (*Lower Back, Knees, Shoulders, Wrists*) to ban high-shear exercises and recalibrate volume.
+          </p>
+          <div style="margin-top: 14px; color: var(--neon-mint); font-size: 0.85rem; font-weight: 700;">Configure Shield &rarr;</div>
+        </div>
+
+        <div class="app-card" style="cursor: pointer;" onclick="navTo('page-scan')">
+          <div style="font-size: 2rem; margin-bottom: 10px;">📸</div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 6px;">AI Vision Symmetry Scanner</h3>
+          <p style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.6;">
+            Upload monthly physique check-ins evaluated by Gemini Flash Vision for posture vectors and corrective prescriptions.
+          </p>
+          <div style="margin-top: 14px; color: var(--neon-mint); font-size: 0.85rem; font-weight: 700;">Upload Check-In &rarr;</div>
+        </div>
+
+      </div>
+
+      <!-- AI Coach Daily Advisory Card -->
+      <div class="app-card" style="margin-top: 18px;">
+        <div class="card-header-bar">
+          <h3 class="card-title-h"><span>🤖</span> AI Coach Form & Recovery Advisory</h3>
+          <span class="metric-pill pill-mint">Live Active</span>
+        </div>
+        <p id="coach-advice-box" style="font-size: 0.9rem; color: var(--text-sub); line-height: 1.7;">
+          Autoregulating training stimulus based on joint restrictions, rolling 14-day mechanical load, and muscular symmetry feedback.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 2: WORKOUT BLUEPRINT                            -->
+    <!-- ====================================================== -->
+    <section id="page-workouts" class="app-page-view">
+      
+      <div class="hero-banner-card" style="height: 180px;">
+        <img src="/static/img/hero_cardio.jpg" alt="Athletic Conditioning Hero">
+        <div class="hero-overlay-grad"></div>
+        <div class="hero-text-content">
+          <span class="metric-pill pill-cyan" style="margin-bottom: 6px;">4-Week Periodized Routine</span>
+          <h2 class="hero-title-text">Resistance & Conditioning Split</h2>
+        </div>
+      </div>
+
+      <div class="app-card">
         <div id="workout-mobile-list">
           <div style="text-align: center; padding: 30px;">
-            <p style="color: var(--text-sub); font-size: 0.88rem;">Loading training routine...</p>
+            <p style="color: var(--text-sub); font-size: 0.9rem;">Loading periodization blueprint...</p>
           </div>
         </div>
 
-        <div style="margin-top: 14px;">
-          <button class="mobile-btn btn-dark-sub" id="btn-recalibrate-workout" onclick="handleGenerateWorkout()">
+        <div style="margin-top: 18px; text-align: right;">
+          <button class="app-btn btn-dark-elevated" id="btn-recalibrate-workout" onclick="handleGenerateWorkout()">
             ⚡ Re-Synthesize 4-Week Blueprint
           </button>
         </div>
+      </div>
 
-      </section>
+    </section>
 
-      <!-- SCREEN 3: BIOMETRICS & INJURY SHIELD -->
-      <section id="page-shield" class="mobile-page">
+    <!-- ====================================================== -->
+    <!-- SCREEN 3: BIOMETRICS & INJURY SHIELD                   -->
+    <!-- ====================================================== -->
+    <section id="page-shield" class="app-page-view">
+      
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--danger); text-transform: uppercase;">Joint Protection Engine</span>
+        <h2 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px;">Biometrics & Injury Shield</h2>
+      </div>
+
+      <div class="grid-cols-2">
         
-        <div style="margin-bottom: 14px;">
-          <span style="font-size: 0.78rem; font-weight: 700; color: var(--danger); text-transform: uppercase;">Joint Protection Engine</span>
-          <h2 style="font-size: 1.35rem; font-weight: 800;">Biometrics & Injury Shield</h2>
-        </div>
-
-        <!-- Live BMI Gauge Card -->
-        <div class="app-card" style="text-align: center; padding: 18px;">
-          <span style="font-size: 0.75rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;">Body Mass Index (BMI)</span>
-          <div id="bmi-number" style="font-size: 2.6rem; font-weight: 800; color: var(--text-main); margin: 4px 0;">24.1</div>
-          <span class="metric-pill pill-mint" id="bmi-status-pill">NORMAL WEIGHT</span>
-        </div>
-
-        <!-- Biometrics & Injury Settings Form -->
+        <!-- Profile Form Card -->
         <div class="app-card">
+          <div class="card-header-bar">
+            <h3 class="card-title-h"><span>⚙️</span> Physical Biometrics</h3>
+          </div>
+
           <form id="mobile-profile-form">
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">Gender</label>
-                <select id="prof-gender" class="mobile-input-field">
-                  <option value="male">Male (Upper V-Taper)</option>
-                  <option value="female">Female (Glute Priority)</option>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label">Physiological Gender</label>
+                <select id="prof-gender" class="form-input-field">
+                  <option value="male">Male (CNS & Upper V-Taper Priority)</option>
+                  <option value="female">Female (Type I Fiber & Glute Priority)</option>
                 </select>
               </div>
 
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">Age</label>
-                <input type="number" id="prof-age" class="mobile-input-field" value="27" min="12" max="100">
+              <div class="form-group">
+                <label class="form-label">Age</label>
+                <input type="number" id="prof-age" class="form-input-field" value="27" min="12" max="100">
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">Height (cm)</label>
-                <input type="number" id="prof-height" class="mobile-input-field" value="180" step="0.5" min="100" max="250">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label">Stature (Height in cm)</label>
+                <input type="number" id="prof-height" class="form-input-field" value="180" step="0.5" min="100" max="250">
               </div>
 
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">Weight (kg)</label>
-                <input type="number" id="prof-weight" class="mobile-input-field" value="78" step="0.5" min="30" max="300">
+              <div class="form-group">
+                <label class="form-label">Body Mass (Weight in kg)</label>
+                <input type="number" id="prof-weight" class="form-input-field" value="78" step="0.5" min="30" max="300">
               </div>
             </div>
 
-            <div class="mobile-input-group">
-              <label class="mobile-input-label">Adaptation Goal</label>
-              <select id="prof-goal" class="mobile-input-field">
-                <option value="hypertrophy">Muscle Hypertrophy</option>
+            <div class="form-group">
+              <label class="form-label">Primary Adaptation Goal</label>
+              <select id="prof-goal" class="form-input-field">
+                <option value="hypertrophy">Hypertrophy (Cross-Sectional Growth)</option>
                 <option value="fat_loss">Fat Loss & Conditioning</option>
-                <option value="strength">Maximal Strength</option>
+                <option value="strength">Neuromuscular Strength & Power</option>
               </select>
             </div>
 
-            <div class="mobile-input-group">
-              <label class="mobile-input-label">Equipment Access</label>
-              <select id="prof-equip" class="mobile-input-field">
-                <option value="full_gym">Full Commercial Gym</option>
-                <option value="dumbbells_only">Dumbbells Only (Home)</option>
-                <option value="no_equipment">Zero Equipment (Bodyweight)</option>
+            <div class="form-group">
+              <label class="form-label">Available Equipment Tier</label>
+              <select id="prof-equip" class="form-input-field">
+                <option value="full_gym">Full Gym (Barbells, Cables, Guided Machines)</option>
+                <option value="dumbbells_only">Dumbbells Only (Free Weights Home Gym)</option>
+                <option value="no_equipment">Zero Equipment (Calisthenics & Bodyweight Only)</option>
               </select>
             </div>
 
-            <!-- Interactive Joint Injury Shield -->
-            <div class="mobile-input-group">
-              <label class="mobile-input-label" style="display: flex; justify-content: space-between;">
-                <span>Joint Restrictions</span>
-                <span style="color: var(--danger); font-size: 0.72rem;">Bans high-shear lifts</span>
+            <!-- Interactive Joint Restrictions Chips -->
+            <div class="form-group">
+              <label class="form-label" style="display: flex; justify-content: space-between;">
+                <span>Active Joint Contraindications</span>
+                <span style="color: var(--danger); font-size: 0.75rem;">Filters high-shear lifts</span>
               </label>
               <div class="shield-chips-box">
-                <div class="shield-chip-btn" data-injury="lower_back">🛡️ Lower Back</div>
-                <div class="shield-chip-btn" data-injury="knees">🛡️ Knees</div>
-                <div class="shield-chip-btn" data-injury="shoulders">🛡️ Shoulders</div>
-                <div class="shield-chip-btn" data-injury="wrists">🛡️ Wrists</div>
+                <div class="shield-chip-btn" data-injury="lower_back">🛡️ Lower Back / Lumbar Strain</div>
+                <div class="shield-chip-btn" data-injury="knees">🛡️ Knee / Patellar Tendonitis</div>
+                <div class="shield-chip-btn" data-injury="shoulders">🛡️ Shoulder Impingement</div>
+                <div class="shield-chip-btn" data-injury="wrists">🛡️ Wrist / Flexor Strain</div>
               </div>
             </div>
 
-            <button type="submit" class="mobile-btn btn-neon-mint" style="margin-top: 10px;">
-              💾 Save Biometrics & Shield
+            <button type="submit" class="app-btn btn-neon-mint btn-block" style="margin-top: 14px;">
+              💾 Save Biometrics & Shield Configuration
             </button>
           </form>
         </div>
 
-      </section>
-
-      <!-- SCREEN 4: FORCE & SET LOGGER -->
-      <section id="page-log" class="mobile-page">
-        
-        <div style="margin-bottom: 14px;">
-          <span style="font-size: 0.78rem; font-weight: 700; color: var(--neon-mint); text-transform: uppercase;">Mechanical Workload</span>
-          <h2 style="font-size: 1.35rem; font-weight: 800;">Log Working Set</h2>
-        </div>
-
-        <div class="app-card">
-          <form id="mobile-log-form">
-            <div class="mobile-input-group">
-              <label class="mobile-input-label">Exercise Name</label>
-              <input type="text" id="log-ex-name" class="mobile-input-field" placeholder="e.g. Incline Dumbbell Press" required>
+        <!-- Biometric Clinical Analysis Card -->
+        <div class="app-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="card-header-bar">
+              <h3 class="card-title-h"><span>📊</span> Clinical Biometrics</h3>
+              <span class="metric-pill pill-mint" id="bmi-status-pill">NORMAL WEIGHT</span>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">Muscle</label>
-                <select id="log-muscle" class="mobile-input-field">
-                  <option value="Chest">Chest</option>
-                  <option value="Upper Back">Upper Back</option>
-                  <option value="Lats">Lats</option>
-                  <option value="Quads">Quads</option>
-                  <option value="Glutes">Glutes</option>
+            <div style="background: #090D16; border: 1px solid var(--card-border); border-radius: 18px; padding: 24px; text-align: center; margin-bottom: 20px;">
+              <span style="font-size: 0.8rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700;">Calculated Body Mass Index (BMI)</span>
+              <div id="bmi-number" style="font-size: 3.2rem; font-weight: 800; color: var(--text-main); margin: 6px 0;">24.1</div>
+              <p style="font-size: 0.82rem; color: var(--text-dim);">Calibrates cardiovascular modalities and axial bone loading limits.</p>
+            </div>
+
+            <div style="background: var(--card-bg-elevated); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--neon-mint); margin-bottom: 6px;">🛡️ How the Injury Shield Protects You</h4>
+              <ul style="font-size: 0.85rem; color: var(--text-sub); list-style: disc inside; line-height: 1.7;">
+                <li><b>Spinal Compression:</b> Bans heavy axial barbell loading; substitutes chest-supported machine rows.</li>
+                <li><b>Shoulder Impingement:</b> Substitutes flat barbell benching with 45-degree tucked floor pressing.</li>
+                <li><b>Patellar Protection:</b> Substitutes ballistic jumps with isometric wall sits and LISS incline walks.</li>
+              </ul>
+            </div>
+          </div>
+
+          <button class="app-btn btn-neon-cyan btn-block" style="margin-top: 20px;" onclick="handleGenerateWorkout()">
+            ⚡ Re-Synthesize 4-Week Blueprint with Shield
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 4: FORCE & SET LOGGER                           -->
+    <!-- ====================================================== -->
+    <section id="page-log" class="app-page-view">
+      
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--neon-mint); text-transform: uppercase;">Mechanical Workload</span>
+        <h2 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px;">Session Force & Volume Logger</h2>
+      </div>
+
+      <div class="grid-cols-2">
+        
+        <div class="app-card">
+          <div class="card-header-bar">
+            <h3 class="card-title-h"><span>🏋️</span> Log Working Set</h3>
+          </div>
+
+          <form id="mobile-log-form">
+            <div class="form-group">
+              <label class="form-label">Exercise Name</label>
+              <input type="text" id="log-ex-name" class="form-input-field" placeholder="e.g. Incline Dumbbell Press" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label">Primary Muscle</label>
+                <select id="log-muscle" class="form-input-field">
+                  <option value="Chest">Chest (Pectoralis)</option>
+                  <option value="Upper Back">Upper Back (Rhomboids)</option>
+                  <option value="Lats">Lats (Latissimus Dorsi)</option>
+                  <option value="Quads">Quads (Quadriceps)</option>
+                  <option value="Glutes">Glutes (Gluteus Maximus)</option>
                   <option value="Hamstrings">Hamstrings</option>
-                  <option value="Shoulders">Shoulders</option>
+                  <option value="Shoulders">Shoulders (Deltoids)</option>
                   <option value="Triceps">Triceps</option>
                   <option value="Biceps">Biceps</option>
-                  <option value="Core">Core</option>
+                  <option value="Core">Core & Abdominals</option>
                 </select>
               </div>
 
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">Set Index</label>
-                <input type="number" id="log-set-num" class="mobile-input-field" value="1" min="1" max="20">
+              <div class="form-group">
+                <label class="form-label">Set Index</label>
+                <input type="number" id="log-set-num" class="form-input-field" value="1" min="1" max="20">
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">Weight (kg)</label>
-                <input type="number" id="log-weight" class="mobile-input-field" value="35" step="0.5" min="0" max="500">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Load (kg)</label>
+                <input type="number" id="log-weight" class="form-input-field" value="40" step="0.5" min="0" max="500">
               </div>
 
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">Reps</label>
-                <input type="number" id="log-reps" class="mobile-input-field" value="10" min="1" max="100">
+              <div class="form-group">
+                <label class="form-label">Reps Completed</label>
+                <input type="number" id="log-reps" class="form-input-field" value="10" min="1" max="100">
               </div>
 
-              <div class="mobile-input-group">
-                <label class="mobile-input-label">RPE</label>
-                <input type="number" id="log-rpe" class="mobile-input-field" value="8" step="0.5" min="1" max="10">
+              <div class="form-group">
+                <label class="form-label">Target RPE</label>
+                <input type="number" id="log-rpe" class="form-input-field" value="8" step="0.5" min="1" max="10">
               </div>
             </div>
 
-            <button type="submit" class="mobile-btn btn-neon-mint" style="margin-top: 6px;">
-              💾 Record Set & Compute 1RM
+            <button type="submit" class="app-btn btn-neon-mint btn-block" style="margin-top: 10px;">
+              💾 Record Working Set & Compute 1RM
             </button>
           </form>
         </div>
 
-        <!-- 1RM Formula & Tonnage Box -->
         <div class="app-card">
-          <div style="font-size: 0.8rem; font-weight: 700; color: var(--neon-cyan); text-transform: uppercase;">Epley 1RM Equation</div>
-          <div style="font-family: monospace; font-size: 1rem; color: var(--text-main); margin: 4px 0;">1RM = Weight &times; (1 + Reps / 30)</div>
-          <p style="font-size: 0.75rem; color: var(--text-dim);">Estimates maximum capability safely without maxing out on injured joints.</p>
-        </div>
+          <div class="card-header-bar">
+            <h3 class="card-title-h"><span>📐</span> Biomechanical Computation Equations</h3>
+          </div>
 
-      </section>
+          <div style="background: #090D16; border: 1px solid var(--card-border); border-radius: 16px; padding: 18px; margin-bottom: 16px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--neon-cyan); text-transform: uppercase;">Epley Estimated 1RM Formula</span>
+            <div style="font-family: var(--font-mono); font-size: 1.15rem; color: var(--text-main); margin: 6px 0;">
+              1RM = Weight &times; [ 1 + (Reps / 30) ]
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-sub); line-height: 1.6;">
+              Calculates absolute muscular force capacity safely without subjecting joints or discs to risky maximal axial load.
+            </p>
+          </div>
 
-      <!-- SCREEN 5: AI VISION SYMMETRY SCANNER -->
-      <section id="page-scan" class="mobile-page">
-        
-        <div class="hero-feature-card" style="height: 130px; margin-bottom: 14px;">
-          <img src="/static/img/hero_scan.jpg" alt="Lab Scan">
-          <div class="hero-grad"></div>
-          <div class="hero-info">
-            <span class="metric-pill pill-mint" style="margin-bottom: 4px;">Gemini Flash Vision</span>
-            <h3 style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF;">AI Muscular Symmetry</h3>
+          <div style="background: #090D16; border: 1px solid var(--card-border); border-radius: 16px; padding: 18px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--neon-mint); text-transform: uppercase;">Tonnage Mechanical Workload</span>
+            <div style="font-family: var(--font-mono); font-size: 1.15rem; color: var(--text-main); margin: 6px 0;">
+              Volume Load (kg) = Sets &times; Reps &times; Weight
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-sub); line-height: 1.6;">
+              Monitored by APScheduler background workers to detect fatigue stagnation and schedule deload weeks.
+            </p>
           </div>
         </div>
 
+      </div>
+
+    </section>
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 5: AI VISION SYMMETRY SCANNER                   -->
+    <!-- ====================================================== -->
+    <section id="page-scan" class="app-page-view">
+      
+      <div class="hero-banner-card" style="height: 180px;">
+        <img src="/static/img/hero_scan.jpg" alt="Biomechanical Lab Scanner">
+        <div class="hero-overlay-grad"></div>
+        <div class="hero-text-content">
+          <span class="metric-pill pill-mint" style="margin-bottom: 6px;">Gemini Flash Vision</span>
+          <h2 class="hero-title-text">AI Muscular Symmetry & Posture Diagnostics</h2>
+        </div>
+      </div>
+
+      <div class="grid-cols-2">
+        
         <div class="app-card">
+          <div class="card-header-bar">
+            <h3 class="card-title-h"><span>📷</span> Physique Check-In Photo</h3>
+            <span class="metric-pill pill-cyan">Visual Biometrics</span>
+          </div>
+
           <form id="mobile-scan-form">
-            <div class="mobile-input-group">
-              <label class="mobile-input-label">Check-In Cycle</label>
-              <select id="scan-month-select" class="mobile-input-field">
+            <div class="form-group">
+              <label class="form-label">Check-In Cycle</label>
+              <select id="scan-month-select" class="form-input-field">
                 <option value="1">Month 1 Baseline</option>
                 <option value="2">Month 2 Check-In</option>
                 <option value="3">Month 3 Progression</option>
               </select>
             </div>
 
-            <div class="mobile-input-group">
-              <label class="mobile-input-label">Physique Photo (JPG/PNG)</label>
-              <input type="file" id="scan-file-input" class="mobile-input-field" accept="image/*" required>
+            <div class="form-group">
+              <label class="form-label">Upload Physique Photograph (JPG / PNG)</label>
+              <input type="file" id="scan-file-input" class="form-input-field" accept="image/*" required>
             </div>
 
-            <img id="scan-preview-img" src="#" alt="Preview" style="display: none; width: 100%; max-height: 200px; border-radius: 12px; object-fit: contain; background: black; margin-bottom: 10px; border: 1px solid var(--card-border);">
+            <img id="scan-preview-img" src="#" alt="Preview" style="display: none; width: 100%; max-height: 220px; border-radius: 14px; object-fit: contain; background: black; margin-bottom: 14px; border: 1px solid var(--card-border);">
 
-            <button type="submit" id="btn-submit-scan" class="mobile-btn btn-neon-mint">
-              🔍 Analyze Check-In Photo
+            <button type="submit" id="btn-submit-scan" class="app-btn btn-neon-mint btn-block">
+              🔍 Analyze Symmetry & Posture
             </button>
           </form>
         </div>
 
-        <!-- Scorecard Results -->
+        <!-- Scorecard Results Card -->
         <div class="app-card" id="scan-result-card" style="display: none;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <div style="font-weight: 700; font-size: 0.95rem;">Symmetry Score</div>
+          <div class="card-header-bar">
+            <h3 class="card-title-h"><span>📊</span> Symmetry Scorecard</h3>
             <span class="metric-pill pill-mint" id="res-scan-score">82.0 / 100</span>
           </div>
 
-          <div style="margin-bottom: 8px;">
-            <div style="font-size: 0.75rem; color: var(--text-sub); font-weight: 700;">Posture Vector:</div>
-            <div id="res-scan-posture" style="font-size: 0.85rem; font-weight: 600;"></div>
+          <div style="margin-bottom: 12px;">
+            <div style="font-size: 0.78rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;">Postural Alignment Vector:</div>
+            <div id="res-scan-posture" style="font-size: 0.95rem; font-weight: 600; margin-top: 3px;"></div>
           </div>
 
-          <div class="metrics-row">
-            <div style="background: var(--card-bg-elevated); padding: 10px; border-radius: 12px;">
-              <div style="font-size: 0.7rem; color: var(--neon-mint); font-weight: 700;">Dominant Areas</div>
-              <div id="res-scan-strong" style="font-size: 0.82rem; font-weight: 600; margin-top: 2px;"></div>
+          <div class="grid-cols-2" style="gap: 12px; margin-bottom: 14px;">
+            <div style="background: var(--card-bg-elevated); padding: 12px; border-radius: 14px;">
+              <div style="font-size: 0.72rem; color: var(--neon-mint); font-weight: 700; text-transform: uppercase;">Dominant Muscle Groups</div>
+              <div id="res-scan-strong" style="font-size: 0.88rem; font-weight: 700; margin-top: 3px;"></div>
             </div>
 
-            <div style="background: var(--card-bg-elevated); padding: 10px; border-radius: 12px;">
-              <div style="font-size: 0.7rem; color: var(--warning); font-weight: 700;">Priority Lagging</div>
-              <div id="res-scan-lagging" style="font-size: 0.82rem; font-weight: 600; margin-top: 2px;"></div>
+            <div style="background: var(--card-bg-elevated); padding: 12px; border-radius: 14px;">
+              <div style="font-size: 0.72rem; color: var(--warning); font-weight: 700; text-transform: uppercase;">Priority Lagging Vectors</div>
+              <div id="res-scan-lagging" style="font-size: 0.88rem; font-weight: 700; margin-top: 3px;"></div>
             </div>
           </div>
 
-          <div style="margin-top: 8px;">
-            <div style="font-size: 0.75rem; color: var(--text-dim); font-weight: 700;">Prescribed Correctives:</div>
+          <div style="margin-bottom: 12px;">
+            <div style="font-size: 0.78rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;">Biomechanical Coaching Analysis:</div>
+            <p id="res-scan-notes" style="font-size: 0.85rem; color: var(--text-dim); margin-top: 3px; line-height: 1.6;"></p>
+          </div>
+
+          <div>
+            <div style="font-size: 0.78rem; color: var(--neon-cyan); font-weight: 700; text-transform: uppercase;">Prescribed Corrective Exercises:</div>
             <div id="res-scan-bonus"></div>
           </div>
         </div>
 
-      </section>
+      </div>
 
-      <!-- SCREEN 6: TONNAGE & DELOAD HUB -->
-      <section id="page-deload" class="mobile-page">
+    </section>
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 6: TONNAGE & DELOAD HUB                         -->
+    <!-- ====================================================== -->
+    <section id="page-deload" class="app-page-view">
+      
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--neon-mint); text-transform: uppercase;">Volume Overload</span>
+        <h2 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px;">Tonnage & Deload Hub</h2>
+      </div>
+
+      <div class="grid-cols-3" style="margin-bottom: 20px;">
         
-        <div style="margin-bottom: 14px;">
-          <span style="font-size: 0.78rem; font-weight: 700; color: var(--neon-mint); text-transform: uppercase;">Volume Fatigue</span>
-          <h2 style="font-size: 1.35rem; font-weight: 800;">Tonnage & Deload Hub</h2>
+        <div class="app-card" style="text-align: center;">
+          <div style="font-size: 0.78rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;">7-Day Tonnage</div>
+          <div id="hub-stat-volume" style="font-size: 2.4rem; font-weight: 800; color: var(--neon-mint); margin: 6px 0;">0 kg</div>
+          <div id="hub-stat-change" style="font-size: 0.85rem; font-weight: 700;">+0.0% vs prior week</div>
         </div>
 
         <div class="app-card" style="text-align: center;">
-          <div style="font-size: 0.75rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;">7-Day Tonnage</div>
-          <div id="hub-stat-volume" style="font-size: 2.2rem; font-weight: 800; color: var(--neon-mint); margin: 4px 0;">0 kg</div>
-          <div id="hub-stat-change" style="font-size: 0.82rem; font-weight: 700;">+0.0% vs prior week</div>
+          <div style="font-size: 0.78rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;">Completed Sets</div>
+          <div id="hub-stat-sets" style="font-size: 2.4rem; font-weight: 800; color: var(--neon-cyan); margin: 6px 0;">0</div>
+          <div style="font-size: 0.78rem; color: var(--text-dim);">Total microcycle volume</div>
         </div>
 
-        <div class="metrics-row">
-          <div class="mini-stat-card">
-            <div class="mini-stat-label">Total Sets</div>
-            <div class="mini-stat-val" id="hub-stat-sets">0</div>
+        <div class="app-card" style="text-align: center;">
+          <div style="font-size: 0.78rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase;">Deload Autoregulation</div>
+          <div style="margin: 12px 0;">
+            <span class="metric-pill pill-mint" id="hub-plateau-badge" style="font-size: 0.8rem;">PROGRESSIVE OVERLOAD</span>
           </div>
-
-          <div class="mini-stat-card">
-            <div class="mini-stat-label">Deload Status</div>
-            <div style="margin-top: 6px;">
-              <span class="metric-pill pill-mint" id="hub-plateau-badge" style="font-size: 0.65rem;">PROGRESSIVE</span>
-            </div>
-          </div>
+          <div style="font-size: 0.78rem; color: var(--text-dim);">Audited by APScheduler</div>
         </div>
 
-        <div class="app-card">
-          <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 4px;">APScheduler Audit Note:</div>
-          <p id="hub-plateau-rec" style="font-size: 0.82rem; color: var(--text-dim); line-height: 1.5;">
-            Auditing rolling 14-day progressive overload.
-          </p>
-          <button class="mobile-btn btn-dark-sub" style="margin-top: 10px;" onclick="triggerManualDeloadAudit()">
+      </div>
+
+      <div class="app-card">
+        <div class="card-header-bar">
+          <h3 class="card-title-h"><span>🤖</span> APScheduler Fatigue Audit Status</h3>
+          <button class="app-btn btn-dark-elevated btn-sm" onclick="triggerManualDeloadAudit()">
             ⚡ Run Manual Plateau Audit
           </button>
         </div>
-
-      </section>
-
-      <!-- SCREEN 7: EXECUTIVE DOSSIER (PDF) -->
-      <section id="page-pdf" class="mobile-page">
-        
-        <div style="margin-bottom: 14px;">
-          <span style="font-size: 0.78rem; font-weight: 700; color: var(--neon-cyan); text-transform: uppercase;">ReportLab Engine</span>
-          <h2 style="font-size: 1.35rem; font-weight: 800;">Executive PDF Dossier</h2>
-        </div>
-
-        <div class="app-card" style="text-align: center; padding: 24px 14px;">
-          <div style="font-size: 2.5rem; margin-bottom: 10px;">📄</div>
-          <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px;">4-Week Coaching Blueprint</h3>
-          <p style="font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; margin-bottom: 16px;">
-            Export your 4-week periodized split, cardio prescriptions, and AI symmetry scorecard directly into a printable executive PDF report.
-          </p>
-          <button class="mobile-btn btn-neon-mint" onclick="downloadPdfReport()">
-            📥 Download Blueprint (PDF)
-          </button>
-        </div>
-
-      </section>
-
-    </main>
-
-    <!-- ====================================================== -->
-    <!-- FIXED BOTTOM MOBILE NAVIGATION BAR (LIKE REFERENCES)   -->
-    <!-- ====================================================== -->
-    <nav class="mobile-bottom-nav">
-      <div class="bottom-nav-tab active" data-target="page-home">
-        <span class="bottom-nav-icon">⚡</span>
-        <span>Home</span>
+        <p id="hub-plateau-rec" style="font-size: 0.9rem; color: var(--text-sub); line-height: 1.7;">
+          Auditing rolling 14-day progressive overload to protect central nervous system and joint structures.
+        </p>
       </div>
+
+    </section>
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 7: EXECUTIVE DOSSIER (PDF)                      -->
+    <!-- ====================================================== -->
+    <section id="page-pdf" class="app-page-view">
       
-      <div class="bottom-nav-tab" data-target="page-workouts">
-        <span class="bottom-nav-icon">🏋️</span>
-        <span>Split</span>
+      <div class="app-card" style="max-width: 680px; margin: 30px auto; text-align: center; padding: 40px 24px;">
+        <div style="font-size: 3rem; margin-bottom: 14px;">📄</div>
+        <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 8px;">Executive 4-Week Coaching Blueprint</h2>
+        <p style="font-size: 0.95rem; color: var(--text-sub); line-height: 1.7; margin-bottom: 24px;">
+          Export your 4-week periodized resistance schedule, prescribed cardiovascular protocol, and AI muscular symmetry scorecard compiled directly into an executive PDF dossier via ReportLab.
+        </p>
+        <button class="app-btn btn-neon-mint" style="padding: 14px 28px; font-size: 1.05rem;" onclick="downloadPdfReport()">
+          📥 Download 4-Week Blueprint (PDF)
+        </button>
       </div>
 
-      <!-- Center Floating Dumbbell / Log Action (Like Reference 2) -->
-      <div class="center-floating-action" data-target="page-log" aria-label="Log Set">
-        🏋️
-      </div>
+    </section>
 
-      <div class="bottom-nav-tab" data-target="page-scan">
-        <span class="bottom-nav-icon">📸</span>
-        <span>Scan</span>
-      </div>
+  </main>
 
-      <div class="bottom-nav-tab" data-target="page-shield">
-        <span class="bottom-nav-icon">🛡️</span>
-        <span>Shield</span>
-      </div>
-    </nav>
+  <!-- ======================================================== -->
+  <!-- FIXED BOTTOM MOBILE NAVIGATION BAR (PHONES ONLY)         -->
+  <!-- ======================================================== -->
+  <nav class="mobile-bottom-nav">
+    <div class="bottom-nav-tab active" data-target="page-home">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>Home</span>
+    </div>
+    
+    <div class="bottom-nav-tab" data-target="page-workouts">
+      <span class="bottom-nav-icon">🏋️</span>
+      <span>Split</span>
+    </div>
 
-  </div> <!-- End Mobile Device Wrapper -->
+    <!-- Center Floating Dumbbell / Logger Shortcut -->
+    <div class="center-floating-action" data-target="page-log" aria-label="Log Set">
+      🏋️
+    </div>
+
+    <div class="bottom-nav-tab" data-target="page-scan">
+      <span class="bottom-nav-icon">📸</span>
+      <span>Scan</span>
+    </div>
+
+    <div class="bottom-nav-tab" data-target="page-shield">
+      <span class="bottom-nav-icon">🛡️</span>
+      <span>Shield</span>
+    </div>
+  </nav>
 
   <!-- ======================================================== -->
   <!-- AUTH MODAL                                               -->
   <!-- ======================================================== -->
-  <div class="mobile-modal-overlay" id="auth-modal">
-    <div class="mobile-modal-card">
-      <div style="text-align: center; margin-bottom: 16px;">
-        <img src="/static/img/logo.jpg" alt="Logo" style="width: 48px; height: 48px; border-radius: 12px; margin-bottom: 6px; object-fit: cover;">
-        <h3 style="font-size: 1.25rem; font-weight: 800;">FitMorph Mobile</h3>
-        <p style="font-size: 0.75rem; color: var(--neon-mint); font-weight: 700; letter-spacing: 1px;">ADAPTIVE FITNESS INTELLIGENCE</p>
+  <div class="app-modal-overlay" id="auth-modal">
+    <div class="app-modal-card">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img src="/static/img/logo.jpg" alt="Logo" style="width: 52px; height: 52px; border-radius: 12px; margin-bottom: 8px; object-fit: cover;">
+        <h3 style="font-size: 1.35rem; font-weight: 800;">Welcome to FitMorph</h3>
+        <p style="font-size: 0.75rem; color: var(--neon-mint); font-weight: 700; letter-spacing: 1.2px;">ADAPTIVE FITNESS INTELLIGENCE</p>
       </div>
 
       <form id="mobile-auth-form">
-        <div class="mobile-input-group">
-          <label class="mobile-input-label">Athlete Email</label>
-          <input type="email" id="auth-email" class="mobile-input-field" placeholder="athlete@fitmorph.com" required>
+        <div class="form-group">
+          <label class="form-label">Athlete Email</label>
+          <input type="email" id="auth-email" class="form-input-field" placeholder="athlete@fitmorph.com" required>
         </div>
 
-        <div class="mobile-input-group">
-          <label class="mobile-input-label">Password</label>
-          <input type="password" id="auth-password" class="mobile-input-field" placeholder="••••••••" required>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="auth-password" class="form-input-field" placeholder="••••••••" required>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0 14px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0 16px;">
           <input type="checkbox" id="auth-is-signup">
-          <label for="auth-is-signup" style="font-size: 0.8rem; color: var(--text-sub); cursor: pointer;">
+          <label for="auth-is-signup" style="font-size: 0.85rem; color: var(--text-sub); cursor: pointer;">
             Create new athlete profile (Sign Up)
           </label>
         </div>
 
-        <button type="submit" class="mobile-btn btn-neon-mint">
-          Enter FitMorph Mobile
+        <button type="submit" class="app-btn btn-neon-mint btn-block">
+          Enter FitMorph Intelligence
         </button>
 
-        <div style="margin-top: 14px; text-align: center; border-top: 1px solid var(--card-border); padding-top: 12px;">
-          <button type="button" class="mobile-btn btn-dark-sub btn-mini" onclick="fillDemoCredentials()">
+        <div style="margin-top: 16px; text-align: center; border-top: 1px solid var(--card-border); padding-top: 14px;">
+          <button type="button" class="app-btn btn-dark-elevated btn-sm" onclick="fillDemoCredentials()">
             🚀 Quick Sign-In with Demo Athlete
           </button>
         </div>
@@ -603,6 +725,6 @@
   <!-- Toast Notification Container -->
   <div id="toast-container"></div>
 
-  <script src="/static/js/app.js?v=3.0"></script>
+  <script src="/static/js/app.js?v=4.0"></script>
 </body>
 </html>

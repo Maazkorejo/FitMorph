@@ -79,21 +79,27 @@ function toggleDrawer(open = null) {
   }
 }
 
-// Mobile Page Routing
+// Page Routing (Desktop and Mobile)
 function navTo(pageId) {
-  const pages = document.querySelectorAll('.mobile-page');
+  const pages = document.querySelectorAll('.app-page-view, .mobile-page');
   pages.forEach(p => p.classList.remove('active'));
   
   const target = document.getElementById(pageId);
   if (target) {
     target.classList.add('active');
     currentPage = pageId;
-    
-    // Scroll viewport to top
-    const viewport = document.getElementById('screen-viewport');
-    if (viewport) viewport.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   
+  // Update desktop navigation active states
+  document.querySelectorAll('.desktop-nav-link').forEach(link => {
+    if (link.getAttribute('data-target') === pageId) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+
   // Update bottom navigation active states
   document.querySelectorAll('.bottom-nav-tab').forEach(tab => {
     if (tab.getAttribute('data-target') === pageId) {
@@ -144,6 +150,12 @@ function updateUserUI() {
   
   const topAvatar = document.getElementById('top-bar-avatar');
   if (topAvatar) topAvatar.textContent = displayName.charAt(0).toUpperCase();
+
+  const topName = document.getElementById('top-bar-name');
+  if (topName) topName.textContent = displayName;
+
+  const homeGreeting = document.getElementById('home-greeting-name');
+  if (homeGreeting) homeGreeting.textContent = displayName;
   
   const drawerName = document.getElementById('drawer-athlete-name');
   if (drawerName) drawerName.textContent = displayName;
